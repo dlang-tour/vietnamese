@@ -1,52 +1,57 @@
-# Welcome to D
+# Hoan nghênh bạn đến với D
 
-Welcome to the interactive tour of the *D Programming language*.
+Nào cùng dạo chơi tìm hiểu về *ngôn ngữ lập trình D*.
 
 {{#dmanmobile}}
 
-The tour gives an overview of this __powerful__ and __expressive__
-language which compiles directly to __efficient__, __native__ machine code.
+Chúng ta sẽ tóm tắt về __sức mạnh__ và __sự truyền cảm__
+của ngôn ngữ *D* với khả năng *biên dịch* trực tiếp mã nguồn sang __mã máy__ __hiệu quả__.
 
 {{/dmanmobile}}
 
-### What is D?
+### D là gì?
 
-D is the culmination of _decades of experience implementing compilers_
-for many diverse languages and has a unique set of features:
+D kết tinh hàng thập kỷ kinh nghiệm phát triển trình biên dịch ở
+các ngôn ngữ khác nhau. D có điều đặc biệt như
 
 {{#dmandesktop}}
 
-- _high level_ constructs for great modeling power
-- _high performance_, compiled language
-- static typing
-- direct interface to the operating system API's and hardware
-- blazingly fast compile-times
-- memory-safe subset (SafeD)
-- _maintainable_, _easy to understand_ code
-- gradual learning curve (C-like syntax, similar to Java and others)
-- compatible with C application binary interface
-- limited compatibility with C++ application binary interface
-- multi-paradigm (imperative, structured, object oriented, generic, functional programming purity, and even assembly)
-- built-in error detection (contracts, unittests)
+- cấu trúc cấp cao với khả năng mô hình hóa tuyệt vời
+- _hiệu năng cao_, ngôn ngữ biên dịch
+- xác định kiểu tĩnh _(static typing)_
+- giao tiếp trực tiếp với API của hệ điều hành hay phần cứng
+- khả năng biên dịch _nhanh chóng_ mã nguồn
+- một bộ phận của D với khả năng chống lỗi liên quan tới bộ nhớ _(SafeD, memory-safe)_
+- mã nguồn _dễ hiểu_, _dễ bảo trì_
+- giúp người học chiếm lĩnh từng bước (cú pháp giống C, tương tự với Java và vài ngôn ngữ khác)
+- tương thích với giao diện ứng dụng C đã biên dịch thành mã máy
+- tương thích _(có giới hạn)_ với giao diện ứng dụng C++ đã biên dịch thành mã máy
+- triển khai nhiều ý niệm (mệnh lệnh theo thứ tự - imperative,
+    cấu trúc - structured,
+    hướng đối tượng - object oriented,
+    đa hình tham số  - generic,
+    lập trình hàm thuần túy - functional programming purity,
+    và ở mức mã máy - assembly)
+- có sẵn bộ dò lỗi (hợp đồng _(contracts)_, kiểm định mức đơn vị _(unittest)_)
 
-... and many more [features](http://dlang.org/overview.html).
+... và thêm nhiều  [tính năng khác](http://dlang.org/overview.html).
 
 {{/dmandesktop}}
 
-### About the tour
+### Giới thiệu về khúc dạo đầu
 
-Each section comes with a source code example that can be modified and used
-to experiment with D's language features.
-Click the run button (or `Ctrl-enter`) to compile and run it.
+Mỗi mục kèm theo mã nguồn minh họa có thể sửa đổi được từ trình duyệt,
+và bạn có thể chạy thử bằng cách chọn *Run* hay nhấn phím `Ctrl-enter`.
 
-To navigate this tour, either use the "`<` previous" and "next `>`" links at the
-bottom (or left and right arrow keys), or else go straight to particular sections
-using the menus at the top.
+Để chuyển tới lui giữ các mục, hãy chọn "`<` trước" hoặc "sau `>`"
+ở cuối trang, hoặc dùng các phím mũi tên trái, phải.
+Bạn có thể tới ngay mục cần xem nhờ menu phía trên.
 
-### Contributing
+### Đóng góp
 
-This tour is [open source](https://github.com/dlang-tour)
-and we welcome pull requests making this tour even better.
+Bạn luôn có thể hoàn thiện tài liệu dạo đầu này bằng cách
+tham gia vào dự án [https://github.com/dlang-tour](https://github.com/dlang-tour)
+trên Github.
 
 ## {SourceCode}
 
@@ -57,19 +62,20 @@ import std.range;
 
 void main()
 {
-    // Let's get going!
-    writeln("Hello World!");
+    // Nào bắt đầu!
+    writeln("Chào thế giới!");
 
-    // An example for experienced programmers:
-    // Take three arrays, and without allocating
-    // any new memory, sort across all the
-    // arrays inplace
+    // Ví dụ  cho lập trình viên kinh nghiệm:
+    // Tạo ra ba mảng số và sắp xếp các số trong
+    // các mảng đó theo thứ tự tự nhiên
+    // mà không cần yêu cầu thêm phần bộ nhớ nào
     int[] arr1 = [4, 9, 7];
     int[] arr2 = [5, 2, 1, 10];
     int[] arr3 = [6, 8, 3];
     sort(chain(arr1, arr2, arr3));
     writefln("%s\n%s\n%s\n", arr1, arr2, arr3);
-    // To learn more about this example, see the
-    // "Range algorithms" page under "Gems"
+    // Để hiểu hơn về ví dụ này, hãy xem phần
+    // "Thuật toán đoạn" (Range algorithms)
+    // ở phần "Gems"
 }
 ```
