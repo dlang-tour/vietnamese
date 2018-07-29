@@ -1,44 +1,54 @@
-# Run D program locally
+# Chạy chương trình D
 
-D comes with a compiler `dmd`, a script-like run tool `rdmd` and
-a package manager `dub`.
+Bộ cài đặt D đi kèm với trình biên dịch `dmd`, công cụ `rdmd` để chạy kịch bản
+viết bằng D, và công cụ quản lý gói `dub`.
 
-### DMD Compiler
+### Trình biên dịch DMD
 
-The *DMD* compiler compiles D file(s) and creates a binary.
-On the command line *DMD* can be invoked with the filename:
+Trình biên dịch *DMD* chuyển hóa mã nguồn D thành dạng mã máy _(nhị phân)_.
+Từ dòng lệnh, bạn gửi yêu cầu biên dịch như sau
 
     dmd hello.d
 
-There are many options that allow you to modify the behavior of the *DMD* compiler.
-Browse the [online documentation](https://dlang.org/dmd.html#switches) or run `dmd --help` for an overview of available flags.
+Xem thêm về tham số điều khiển quá trình và kết quả biên dịch
+  [tại trang này](https://dlang.org/dmd.html#switches)
+hoặc từ kết quả của lệnh `dmd --help`.
 
-### On-the-fly compilation with `rdmd`
+### Chạy ngay kịch bản `rdmd`
 
-The helper tool `rdmd`, distributed with the DMD compiler,
-will make sure to compile all dependencies and automatically runs
-the resulting application:
+Theo cách truyền thống ở các ngôn ngữ biên dịch, bạn cần dịch `hello.d`
+bằng `dmd`, rồi đó tự gõ vào lệnh `./hello` để thi hành kết quả.
+Việc này hơi mất chút thời gian.
+
+Phỏng theo kiểu ngôn ngữ thông dịch, bộ cài đặt D đi kèm công cụ `rdmd`
+cho phép bạn chạy ngay ứng dụng của bạn:
 
     rdmd hello.d
 
-On UNIX systems the shebang line `#!/usr/bin/env rdmd` can be put
-on the first line of an executable D file to allow a script-like
-usage.
+Trên hệ thống UNIX, bạn dùng _(shebang)_ chỉ dấu `#!/usr/bin/env rdmd` ở
+dòng đầu tiên của chương trình để có một _kịch bản_ trong D.
 
-Browse the [online documentation](https://dlang.org/rdmd.html) or run `rdmd --help` for for an overview of available flags.
+Xem thêm tham số điều khiển của `rmd` [ở đây](https://dlang.org/rdmd.html)
+hoặc từ kết quả của lệnh `rdmd --help`.
 
-### Package manager `dub`
+### Quản lý gói với `dub`
 
-D's standard package manager is [`dub`](http://code.dlang.org). When `dub` is
-installed locally, a new project `hello` can be created using
-the command line:
+Khi dùng D, các gói hay thư viện được quản lý nhờ ứng dụng  [`dub`](http://code.dlang.org).
+
+Trước tiên, để tạo dự án mới, ví dụ  `hello`, bạn chạy tham số `init`:
 
     dub init hello
 
-Running `dub` inside this folder will fetch all dependencies, compile the
-application and run it.
-`dub build` will compile the project.
+`dub` tạo ra thư mục mới `hello` và bên trong đó, sau khi thi hành
 
-Browse the [online documentation](https://code.dlang.org/docs/commandline) or run `dub help` for an overview of available commands and features.
+    dub
 
-All available dub packages can be browsed through dub's [web interface](https://code.dlang.org).
+`dub` tải về các gói phụ thuộc, rồi biên dịch chương trình và thi
+hành luôn kết quả.
+
+Nếu chỉ muốn biên dịch mà không thi hành kết quả, bạn dùng `dub build`.
+
+Xem thêm về các tham số điều khiển [ở đây](https://code.dlang.org/docs/commandline)
+hoặc từ kết quả của lệnh `dub help`.
+
+`dub` quản lý các gói nhờ vào [thư viện chung ở đây](https://code.dlang.org).
