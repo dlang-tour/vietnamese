@@ -14,7 +14,7 @@ Xem thêm về tham số điều khiển quá trình và kết quả biên dịc
   [tại trang này](https://dlang.org/dmd.html#switches)
 hoặc từ kết quả của lệnh `dmd --help`.
 
-### Chạy ngay kịch bản `rdmd`
+### Chạy ngay kịch bản với `rdmd`
 
 Theo cách truyền thống ở các ngôn ngữ biên dịch, bạn cần dịch `hello.d`
 bằng `dmd`, rồi đó tự gõ vào lệnh `./hello` để thi hành kết quả.
