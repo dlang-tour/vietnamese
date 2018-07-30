@@ -38,5 +38,5 @@ Một số IDE được thiết kế chỉ dành riêng cho D:
 - [Coedit](https://github.com/BBasile/Coedit)
 - [Dlang IDE](https://github.com/buggins/dlangide)
 
-Xem nhiều hơn ở các trang [Editors]](https://wiki.dlang.org/Editors)
+Xem nhiều hơn ở các trang [Editors](https://wiki.dlang.org/Editors)
 và [IDE](https://wiki.dlang.org/IDEs).
