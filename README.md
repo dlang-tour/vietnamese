@@ -1,27 +1,41 @@
-Vietnamese language version of the DLang Tour
-==============================================
+Khúc dạo đầu về DLang
+=====================
+
+... hay là phiên bản tiếng Việt của Dlang Tour.
 
 [![Build Status](https://travis-ci.org/dlang-tour/vietnamese.svg?branch=master)](https://travis-ci.org/dlang-tour/vietnamese)
 
-Found a typo or want to improve the content?
-Just click on "edit" and send us a pull request.
-If you want to discuss an idea for a change first,
-don't hesitate to open an [issue](https://github.com/dlang-tour/vietnamese/issues).
+Bạn đang đọc chỉ dẫn đầu tiên của dự án chuyển ngữ DLang Tour.
+Kết quả của dự án có ở trang web
 
-You might also be looking for the [base repository](https://github.com/dlang-tour/core)
-that hosts the content.
+https://tour.dlang.org/tour/vi
 
-Run locally
------------
+Nếu bạn tìm thấy cần cải thiện, thay đổi hay trao đổi về việc chuyển ngữ
+hay các vấn đề khác về ngôn ngữ, vui lòng tham gia ở
+[ở đây](https://github.com/dlang-tour/vietnamese/issues).
 
-You will need to fetch the [base repository](https://github.com/dlang-tour/core) via DUB once:
+Dự án gốc có thể xem [ở đây](https://github.com/dlang-tour/core).
 
-```sh
-dub fetch dlang-tour
-```
+Thử nghiệm
+----------
 
-Now you can execute `dlang-tour` in the root directory of this repository:
+Tài liệu gốc của bản dịch ở định dạng `Markdown`.
+Để xem trước kết quả dịch hãy theo các bước sau:
 
 ```sh
-dub run dlang-tour -- --lang-dir .
+$ dub fetch dlang-tour # chỉ cần làm một lần
+
+# Đảm bảo rằng bạn có dlang-tour phiên bản >= 1.1.0
+$ dub list | grep dlang-tour
+  dlang-tour 1.1.0: .../dlang-tour-1.1.0/dlang-tour/
+
+$ dub run dlang-tour \
+  --verbose \
+  --override-config="vibe-d:tls/openssl-1.1" \
+  -- --lang-dir .
+...
+
+[main(----) INF] Listening for requests on http://127.0.0.1:8080/
 ```
+
+Bây giờ có thể xem http://localhost:8080/ từ trình duyệt của bạn rồi:)
