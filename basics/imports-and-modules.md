@@ -1,51 +1,49 @@
-# Imports and modules
+# Mô-đun và nạp mô-đun
 
 {{#img-right}}turtle.svg{{/img-right}}
 
-One of D's core design decision was to be consistent and avoid corner cases
-in the language.
-This is called [_turtles all the way down_](https://en.wikipedia.org/wiki/Turtles_all_the_way_down).
-One good example for this consistency are `import`s.
+Một trong những tiêu chuẩn thiết kế cốt lõi của D là đảm bảo sự vững chắc
+và tránh các trường hợp ngoại lệ trong ngôn ngữ.
+Thành ngữ tiếng Anh phản ánh ý tưởng này là [_turtles all the way down_](https://en.wikipedia.org/wiki/Turtles_all_the_way_down).
+Một ví dụ về sự chắc chắn là việc nạp mô-đun với `import`.
 
-## Imports
+## Nạp mô-đun
 
-For a simple hello world program in D, `import`s are needed.
-The `import` statement makes all public functions
-and types from the given **module** available.
+Chương trình chào thế giới đơn giản nhất trong `D` cũng cần nạp vài mô-đun
+bằng `import`, nhờ đó các hàm và kiểu từ mô-đun có thể dùng được trong chương trình.
 
 ### The turtles start falling down
 
-An `import` statement __does not__ need to appear at the top of a source file.
-It can also be used locally within functions or any other scope.
-In the following chapters you will see that this applies to almost all concepts in D. The language doesn't expose arbitrary restrictions on you.
+Bạn __không cần__ phải để chỉ thị `import` ở đầu tập tin mã nguồn,
+mà có thể đặt nó bên trong định nghĩa của hàm hay ngữ cảnh cụ thể.
+Trong trong các phần tiếp theo, bạn sẽ thấy ý tuởng về vị trí này
+áp dụng với hầu hết các thiết kế của D. Ngôn ngữ D không đặt ra các giới hạn tùy hứng.
 
-### Selective imports
+### Giới hạn khi nạp mô-đun
 
-The standard library, called [Phobos](https://dlang.org/phobos/),
-is located under the **package** `std`
-and its modules are referenced through `import std.MODULE`.
+Thư viện tiêu chuẩn [Phobos](https://dlang.org/phobos/) được nạp từ
+gói có tên bắt đầu bằng `std`, và các mô-đun của thư viện đó được nạp
+theo dạng `import std.MÔ-ĐUN`.
 
-The `import` statement can also be used to selectively
-import certain symbols of a module:
+Đôi khi bạn chỉ cần nạp một số thứ thật sự cần:
 
     import std.stdio : writeln, writefln;
 
-Selective imports can be used to improve readability by making
-it obvious where a symbol comes from, and also as a way to
-prevent clashing of symbols with the same name from different modules.
+Bằng cách này bạn sẽ thấy ngay được hàm, biểu thức được lấy từ mô-đun nào,
+và cũng giúp tránh việc trùng tên giữa các thành phần của các mô-đun khác nhau.
 
-### Imports match directories and files
+### Mô-đun và sự liên quan với cấu trúc thư mục
 
-D's module system — in contrast to other systems — is entirely based on files.
-For example, `my.cat` always refers to a file `cat.d` in the folder `my/`.
-The folder `my` needs to be in the current working directory or
-in one of the explicitly specified directory imports (`-I`).
-Lastly, to ease splitting big modules up into multiple smaller files,
-instead of `cat.d`, a folder `cat/` could be used as well.
-The D compiler would then try to load `my/cat/package.d` instead of `my/cat.d`.
+Hệ thống mô-đun của D dựa hoàn toàn vào cấu trúc tập tin trên hệ thống.
+Ví dụ, mô-đun `my.cat` luôn có mã nguồn tên `cat.d` nằm trong thư mục `my/`,
+còn thư mục này có thể nằm trong thư mục hiện tại, hoặc một trong các thư mục
+được liệt kê trong chỉ thị `-I` khi biên dịch.
 
-The convention (but not a hard rule) for `package.d` files is to publicly import
-all other modules in the same folder.
+Các mô-đun lớn có thể được chia nhỏ ra nhờ sử dụng các thư mục con.
+Ví dụ, thay cho `cat.d` bạn có thể dùng `my/cat/package.d`, và nhờ đó,
+bạn có thể có mô-dun khác `my/dog/package.d` cùng bên trong thư mục `my/`.
+
+Việc dùng tên `package.d` là để quy ước nạp tất cả các mô-đun khác cùng thư mục.
 
 ## {SourceCode}
 
@@ -54,6 +52,6 @@ void main()
 {
     import std.stdio;
     // or import std.stdio : writeln;
-    writeln("Hello World!");
+    writeln("Chào thế giới!");
 }
 ```
