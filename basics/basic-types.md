@@ -1,13 +1,11 @@
-# Basic types
+# Kiểu số cơ bản
 
-D provides a number of basic types which always have the same
-size **regardless** of the platform - the only exception
-is the `real` type which provides the highest possible floating point
-precision. There is no difference
-between the size of an integer regardless of whether the application
-is compiled for 32-bit or 64-bit systems.
+D có các kiểu số cơ bản với kích cỡ bộ nhớ cần thiết là như nhau bất kể
+hệ điều hành đang chạy là gì, ngoại trừ kiểu số thực `real` với dấu chấm động.
+Cụ thể hơn, dù bạn đang chạy ứng dụng D trên máy 32 hay 64 bit, thì
+mỗi biến của các kiểu sau vẫn chiếm cùng số bít trên bộ nhớ.
 
-| type                          | size
+| kiểu                          | cỡ
 |-------------------------------|------------
 |`bool`                         | 8-bit
 |`byte`, `ubyte`, `char`        | 8-bit
@@ -15,77 +13,85 @@ is compiled for 32-bit or 64-bit systems.
 |`int`, `uint`, `dchar`         | 32-bit
 |`long`, `ulong`                | 64-bit
 
-#### Floating point types:
+#### Kiểu số thực với dấu chấm động
 
-| type    | size
+| kiểu    | cỡ
 |---------|--------------------------------------------------
 |`float`  | 32-bit
 |`double` | 64-bit
-|`real`   | >= 64-bit (generally 64-bit, but 80-bit on Intel x86 32-bit)
+|`real`   | >= 64-bit (thường là 64-bit, hoặc 80-bit trên Intel x86 32-bit)
 
-The prefix `u` denotes *unsigned* types. `char` translates to
-UTF-8 characters, `wchar` is used in UTF-16 strings and `dchar`
-in UTF-32 strings.
+Kiểu bắt đầu bởi `u` để kiểu không nhận giá trị âm (không dấu).
+Kiểu `char` thực sự được nhúng trong UTF-8, trong khi `wchar`
+dùng ký tự UTF-16, còn `dchar` là UTF-32.
 
-A conversion between variables of different types is only
-allowed by the compiler if no precision is lost. However,
-a conversion between floating point types
-(e.g `double` to `float`) is allowed.
+Trình biên dịch D chỉ thực hiện chuyển đổi kiểu nếu đảm bảo được sự toàn vẹn
+giá trị con số. Tuy nhiên, việc chuyển đổi giữa các kiểu số thực chấm động
+thì được thực hiện thoải mái.
 
-A conversion to another type may be forced by using the
-`cast(TYPE) myVar` expression. It needs to be used with great care though,
-as the `cast` expression is allowed to break the type system.
+Việc chuyển đổi có thể  mang tính cưỡng chép bằng chỉ thị
+`cast(KIỂU) tên_biến`. Việc này cần phải làm hết sức cẩn thận.
 
-The special keyword `auto` creates a variable and infers its
-type from the right hand side of the expression. `auto myVar = 7`
-will deduce the type `int` for `myVar`. Note that the type is still
-set at compile-time and can't be changed - just like with any other
-variable with an explicitly given type.
+Từ khóa `auto` để khai báo biến và nội suy kiểu của nó từ biểu thức
+bên phải. Ví dụ, `auto myVar = 7` sẽ xác định kiểu `int` cho biến `myVar`.
+Việc nội suy này được thực hiện lúc biên dịch, và sau đó kết quả không thể
+thay đổi.
 
-### Type properties
+### Giới hạn của các kiểu số
 
-All data types have a property `.init` to which they are initialized.
-For all integers this is `0` and for floating points it is `nan` (*not a number*).
+_(... hay là thuộc tính của kiểu.)_
 
-Integral and floating point types have a `.max` property for the highest value
-they can represent. Integral types also have a `.min` property for the lowest value
-they can represent, whereas floating point types have a `.min_normal` property
-which is defined to the smallest representable normalized value that's not 0.
+Biến kiểu số cũng là đối tượng với các thuộc tính riêng, ví dụ
 
-Floating point types also have properties `.nan` (NaN-value), `.infinity`
-(infinity value), `.dig` (number of decimal digits of precisions), `.mant_dig`
-(number of bits in mantissa) and more.
+    int.init
 
-Every type also has a `.stringof` property which yields its name as a string.
+xác định giá trị khởi đầu mặc định cho mỗi biến số kiểu `int`.
+Với các kiểu số nguyên, giá trị này là `0`; với kiểu số chấm động, đó là `nan`.
 
-### Indexes in D
+Giá trị `kiểu.max` và `kiểu.min` xác định giới hạn trên, dưới hay là khoảng
+các giá trị mà `kiểu` có thể biểu diễn. Ví dụ,
 
-In D, indexes usually have the alias type `size_t`, as it is a type that
-is large enough to represent an offset into all addressable memory - this is
-`uint` for 32-bit and `ulong` for 64-bit architectures.
+    int.max # 2147483647
+    int.min # -2147483648
 
-### Assert expression
+Với kiểu số chấm động, `kiểu.min_normal` là giá trị  nhỏ nhất khác `0`
+biểu diễn được trong kiểu, còn `.nan` chỉ giá trị không xác định,
+`.infinity` chỉ vô cùng, `.dig` chỉ số chữ số sau dấu phấy thập phân,
+`.mant_dig` là số bit trong phần [Mantissa](https://www.doc.ic.ac.uk/~eedwards/compsys/float/), v.v...
 
-`assert` is an expression which verifies conditions in debug mode and aborts
-with an `AssertionError` if it fails.
-`assert(0)` is thus used to mark unreachable code.
+Chỉ thị `kiểu.stringof` là chuỗi ký tự  biểu diễn tên của kiểu.
 
-### In-depth
+### Đánh số thứ tự
 
-#### Basic references
+Để đánh số thứ tự, ví dụ cho các phần tử trong một mảng, ta có thể dùng
+kiểu `size_t`, mà giới hạn của nó đủ lớn để đánh dấu tất cả các địa chỉ
+trên bộ nhớ. Kiểu `size_t` thực ra là tên khác của kiểu `uint` trên máy
+32 bit, hay của `ulong` trên máy 64 bit.
 
-- [Assignment](http://ddili.org/ders/d.en/assignment.html)
-- [Variables](http://ddili.org/ders/d.en/variables.html)
-- [Arithmetics](http://ddili.org/ders/d.en/arithmetic.html)
-- [Floating Point](http://ddili.org/ders/d.en/floating_point.html)
-- [Fundamental types in _Programming in D_](http://ddili.org/ders/d.en/types.html)
+### Biểu thức chặn
 
-#### Advanced references
+Khi chương trình chạy ở chế độ dò lỗi (`debug`), biểu thức `assert` kiểm tra
+một số điều kiện nào đó, và khi chúng bị vi phạm, biểu thức sẽ chặn không
+cho chương trình chạy tiếp, và trả về lỗi `AssertionError`.
 
-- [Overview of all basic data types in D](https://dlang.org/spec/type.html)
-- [`auto` and `typeof` in _Programming in D_](http://ddili.org/ders/d.en/auto_and_typeof.html)
-- [Type properties](https://dlang.org/spec/property.html)
-- [Assert expression](https://dlang.org/spec/expression.html#AssertExpression)
+Chặn `assert(0)` đảm bảo toàn bộ đoạn mã sau đó không bao giờ được thi hành.
+
+### Đọc tiếp
+
+#### Phần cơ bản
+
+- [Phép gán](http://ddili.org/ders/d.en/assignment.html)
+- [Biến](http://ddili.org/ders/d.en/variables.html)
+- [Số học](http://ddili.org/ders/d.en/arithmetic.html)
+- [Số chấm động](http://ddili.org/ders/d.en/floating_point.html)
+- [Phần Kiểu cơ bản trong sách _Programming in D_](http://ddili.org/ders/d.en/types.html)
+
+#### Phần nâng cao
+
+- [Tổng quan về các kiểu cơ bản trong D](https://dlang.org/spec/type.html)
+- [Phần `auto` `typeof` trong sách _Programming in D_](http://ddili.org/ders/d.en/auto_and_typeof.html)
+- [Tính chất của các kiểu](https://dlang.org/spec/property.html)
+- [Biểu thức chặn](https://dlang.org/spec/expression.html#AssertExpression)
 
 ## {SourceCode}
 
@@ -94,26 +100,23 @@ import std.stdio : writeln;
 
 void main()
 {
-    // Big numbers can be separated
-    // with an underscore "_"
-    // to enhance readability.
+    // Để dễ đọc, dùng "_"
+    // để tách các phần của số
     int b = 7_000_000;
-    short c = cast(short) b; // cast needed
-    uint d = b; // fine
+    short c = cast(short) b; // cần đổi kiểu
+    uint d = b; // không vấn đề gì
     int g;
     assert(g == 0);
 
-    auto f = 3.1415f; // f denotes a float
+    auto f = 3.1415f; // f là số thực
 
-    // typeid(VAR) returns the type information
-    // of an expression.
-    writeln("type of f is ", typeid(f));
-    double pi = f; // fine
-    // for floating-point types
-    // implicit down-casting is allowed
+    // typeid(VAR) cho thông tin về kiểu.
+    writeln("kiểu của f là ", typeid(f));
+    double pi = f; // đổi kiểu được
+    // vì đây là các số chấm động
     float demoted = pi;
 
-    // access to type properties
+    // xem thuộc tính của kiểu
     assert(int.init == 0);
     assert(int.sizeof == 4);
     assert(bool.max == 1);
