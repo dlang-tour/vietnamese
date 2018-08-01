@@ -110,7 +110,7 @@ void main()
 
     auto f = 3.1415f; // f là số thực
 
-    // typeid(VAR) cho thông tin về kiểu.
+    // typeid(Biến) cho thông tin về kiểu.
     writeln("kiểu của f là ", typeid(f));
     double pi = f; // đổi kiểu được
     // vì đây là các số chấm động
