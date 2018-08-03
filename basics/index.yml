@@ -2,7 +2,7 @@ title: Cơ bản
 ordering:
 - imports-and-modules
 - basic-types
-# - memory
+- memory
 # - type-qualifiers
 # - controlling-flow
 # - functions

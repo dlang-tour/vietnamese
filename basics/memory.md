@@ -1,40 +1,40 @@
-# Memory
+# Bộ nhớ
 
-D is a system programming language and thus allows manual
-memory management. However, manual memory management is very error-prone
-and thus D uses a *garbage collector* by default to manage memory allocation.
+Dlang cho phép lập trình viên can thiệp vào việc quản lý bộ nhớ.
+Và để hạn chế lỗi phát sinh trong việc cấp phát bộ nhớ,
+Dlang có cơ chế dọn dẹp rác bộ nhớ (`garbage collector`);
+cơ chế này được kích hoạt mặc định khi bạn chạy chương trình D.
 
-D provides pointer types `T*` like in C:
+Giống trong `C`, bạn có thể dùng kiểu con trỏ `T*` trong `D`:
 
     int a;
-    int* b = &a; // b contains address of a
-    auto c = &a; // c is int* and contains address of a
+    int* b = &a; // b chứa địa chỉ của a
+    auto c = &a; // c có kiểu int*, giá trị là địa chỉ củ a
 
-A new memory block on the heap is allocated using the
-`new` expression, which returns a pointer to the managed
-memory:
+Vùng bộ nhớ trên `heap` được cấp nhờ  chỉ thị `new`, kết quả của nó
+là con trỏ đến vùng được phát:
 
     int* a = new int;
 
-As soon as the memory referenced by `a` isn't referenced anymore
-through any variable in the program, the garbage collector
-will free its memory.
+Đến khi nào `a` không trỏ tới vùng nhớ đã cấp, bộ dọn rác sẽ kích hoạt
+và giải phóng vùng đó cho việc khác.
 
-D has three different security levels for functions: `@system`, `@trusted`, and `@safe`.
-Unless specified otherwise, the default is `@system`.
-`@safe` is a subset of D that prevents memory bugs by design.
-`@safe` code can only call other `@safe` or `@trusted` functions.
-Moreover, explicit pointer arithmetic is forbidden in `@safe` code:
+Các hàm trong D được xếp vào một trong ba cấp an toàn liên quan tới
+cấp phát bộ nhớ: `@system` _(mặc định)_, `@trusted`, và `@safe`.
+Trong đó, `@safe` dành cho hàm có thiết kế tránh được lỗi liên quan bộ nhớ,
+và chúng chỉ có thể gọi các hàm khác trong cùng cấp `@safe`, hoặc `@trusted`.
+Các hàm `@safe` cũng không chấp nhận phép tính số học trên con trỏ:
 
     void main() @safe {
         int a = 5;
         int* p = &a;
-        int* c = p + 5; // error
+        int* c = p + 5; // lỗi
     }
 
-`@trusted` functions are manually verified functions that allow a bridge between SafeD and the underlying dirty low-level world.
+Các hàm `@trusted` được xác nhận bằng tay rằng chúng cho phép cầu nối
+giữa `SafeD` và các cấp thấp hơn.
 
-### In-depth
+### Đọc tiếp
 
 * [SafeD](https://dlang.org/safed.html)
 
@@ -45,8 +45,8 @@ import std.stdio : writeln;
 
 void safeFun() @safe
 {
-    writeln("Hello World");
-    // allocating memory with the GC is safe too
+    writeln("Chào thế giới");
+    // Hàm bộ nhớ bằng GC thuộc lớp @safe
     int* p = new int;
 }
 
