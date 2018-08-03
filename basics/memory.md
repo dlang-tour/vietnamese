@@ -2,7 +2,7 @@
 
 Dlang cho phép lập trình viên can thiệp vào việc quản lý bộ nhớ.
 Và để hạn chế lỗi phát sinh trong việc cấp phát bộ nhớ,
-Dlang có cơ chế dọn dẹp rác bộ nhớ (`garbage collector`);
+Dlang có cơ chế dọn dẹp rác bộ nhớ (`garbage collector`, viết tắt `GC`);
 cơ chế này được kích hoạt mặc định khi bạn chạy chương trình D.
 
 Giống trong `C`, bạn có thể dùng kiểu con trỏ `T*` trong `D`:
@@ -46,7 +46,7 @@ import std.stdio : writeln;
 void safeFun() @safe
 {
     writeln("Chào thế giới");
-    // Hàm bộ nhớ bằng GC thuộc lớp @safe
+    // Hàm cấp bộ nhớ với GC thuộc lớp @safe
     int* p = new int;
 }
 
