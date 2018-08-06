@@ -3,7 +3,7 @@ ordering:
 - imports-and-modules
 - basic-types
 - memory
-# - type-qualifiers
+- type-qualifiers
 # - controlling-flow
 # - functions
 # - structs
