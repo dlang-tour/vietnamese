@@ -4,7 +4,7 @@ ordering:
 - basic-types
 - memory
 - type-qualifiers
-# - controlling-flow
+- controlling-flow
 # - functions
 # - structs
 # - arrays
