@@ -55,7 +55,7 @@ void main()
     int c = 5;
     switch(c) {
         case 0: .. case 9:
-            writeln(c, " is within 0-9");
+            writeln(c, " trong khoảng 0-9");
             break; // cần thiết!
         case 10:
             writeln("Đó là mười!");
