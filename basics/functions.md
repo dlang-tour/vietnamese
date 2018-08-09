@@ -1,67 +1,66 @@
-# Functions
+# Hàm
 
-One function has already been introduced: `main()` - the starting point of every
-D program. A function may return a value (or be declared with
-`void` if nothing is returned) and accept an arbitrary number of arguments:
+Bạn đã thấy đâu đó hàm `main()`, là hàm bắt đầu của mọi ứng dụng D.
+Hàm có thể trả về giá trị, hoặc không trả về giá trị nào (`void`),
+còn đầu vào của hàm có thể có tùy ý tham số.
 
     int add(int lhs, int rhs) {
         return lhs + rhs;
     }
 
-### `auto` return types
+### `auto` tự xác định kiểu trả về
 
-If the return type is defined as `auto`, the D compiler infers the return
-type automatically. Hence multiple `return` statements must return values with
-compatible types.
+Kiểu trả về của hàm có thể được D nội suy từ biểu thức định nghĩa hàm.
+Các biểu thức `return` khác nhau trong hàm phải trả về những kiểu giá trị
+tương thích nhau.
 
-    auto add(int lhs, int rhs) { // returns `int`
+    auto add(int lhs, int rhs) { // trả về kiểu `int`
         return lhs + rhs;
     }
 
-    auto lessOrEqual(int lhs, int rhs) { // returns `double`
+    auto lessOrEqual(int lhs, int rhs) { // trả về kiểu `double`
         if (lhs <= rhs)
             return 0;
         else
             return 1.0;
     }
 
-### Default arguments
+### Giá trị đầu vào mặc định
 
-Functions may optionally define default arguments.
-This avoids the tedious work of declaring redundant
-overloads.
+Tham số đầu vào của hàm có thể nhận giá trị mặc định,
+nhờ cách này lập trình viên đỡ mất công định nghĩa chồng hàm.
 
-    void plot(string msg, string color = "red") {
+    void plot(string msg, string color = "đỏ") {
         ...
     }
-    plot("D rocks");
-    plot("D rocks", "blue");
+    plot("D tuyệt");
+    plot("D tuyệt", "xanh");
 
-Once a default argument has been specified, all following arguments
-must be default arguments too.
+Khi một tham số được chỉ ra giá trị mặc định, tất cả tham số theo sau nó
+cũng phải được chỉ ra giá trị mặc định.
 
-### Local functions
+### Hàm cục bộ
 
-Functions may even be declared inside other functions, where they may be
-used locally and aren't visible to the outside world.
-These functions can even have access to objects that are local to
-the parent's scope:
+Bạn có thể định nghĩa hàm bên trong hàm khác, chỉ để sử dụng bên trong ngữ
+cảnh của hàm này, còn bên ngoài thì không thể truy cập được.
+Tất nhiên, từ hàm bên trong có thể nhìn thấy các biến, đối tượng bên ngoài nó.
 
     void fun() {
         int local = 10;
         int fun_secret() {
-            local++; // that's legal
+            local++; // local ở ngoài nhé
         }
         ...
 
-Such nested functions are called delegates, and they will be explained in more depth
-[soon](basics/delegates).
 
-### In-depth
+Hàm lồng nhau này được gọi là *ủy nhiệm* (delegate),
+và sẽ được mô tả chi tiết hơn [ở đây](basics/delegates).
 
-- [Functions in _Programming in D_](http://ddili.org/ders/d.en/functions.html)
-- [Function parameters in _Programming in D_](http://ddili.org/ders/d.en/function_parameters.html)
-- [Function specification](https://dlang.org/spec/function.html)
+### Đọc thêm
+
+- [Hàm trong sách _Programming in D_](http://ddili.org/ders/d.en/functions.html)
+- [Tham số của hàm trong sách _Programming in D_](http://ddili.org/ders/d.en/function_parameters.html)
+- [Đặc tả hàm](https://dlang.org/spec/function.html)
 
 ## {SourceCode}
 
@@ -71,8 +70,7 @@ import std.random : uniform;
 
 void randomCalculator()
 {
-    // Define 4 local functions for
-    // 4 different mathematical operations
+    // Bốn hàm ứng với bốn phép toán
     auto add(int lhs, int rhs) {
         return lhs + rhs;
     }
@@ -89,10 +87,9 @@ void randomCalculator()
     int a = 10;
     int b = 5;
 
-    // uniform generates a number between START
-    // and END, whereas END is NOT inclusive.
-    // Depending on the result we call one of
-    // the math operations.
+    // uniform chọn ra số ngẫu nhiên
+    // trong khoảng (0, 4), nhưng trừ số 4
+    // Ứng với kết quả là một phép toán.
     switch (uniform(0, 4)) {
         case 0:
             writeln(add(a, b));
@@ -107,8 +104,7 @@ void randomCalculator()
             writeln(div(a, b));
             break;
         default:
-            // special code which marks
-            // UNREACHABLE code
+            // Đặc biệt... có gì sai?
             assert(0);
     }
 }
@@ -116,8 +112,8 @@ void randomCalculator()
 void main()
 {
     randomCalculator();
-    // add(), sub(), mul() and div()
-    // are NOT visible outside of their scope
+    // Không thể truy cập add, sub, mul, div
+    // từ bên ngoài randomCalculator()
     static assert(!__traits(compiles,
                             add(1, 2)));
 }

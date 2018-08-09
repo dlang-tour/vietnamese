@@ -5,7 +5,7 @@ ordering:
 - memory
 - type-qualifiers
 - controlling-flow
-# - functions
+- functions
 # - structs
 # - arrays
 # - slices
