@@ -1,83 +1,80 @@
-# Arrays
+# Mảng
 
-There are two types of Arrays in D: **static** and **dynamic**.
-Access to arrays of any kind is bounds-checked (except when the compiler can prove
-that bounds checks aren't necessary).
-A failed bounds check yields a `RangeError` which aborts the application.
-The brave can disable this safety feature with the
-compiler flag `-boundscheck=off`
-in order to gain speed improvements at the cost of safety.
+Mảng trong D có thể là **mảng động** hoặc **mảng tĩnh**.
+Việc sử dụng mảng luôn phải đảm bảo các chặn trên dưới được đảm bảo,
+về bản chất là ngăn chặn truy cập ra ngoài vùng nhớ đang được
+cấp phát cho mảng.
+Việc truy cập ngoài chặn (trên, dưới) sẽ phát sinh lỗi `RangeError`
+và làm chương trình dừng lại. Nếu đủ dũng cảm, bạn có thể yêu cầu trình
+biên dịch bỏ qua việc kiểm tra chặn bằng chỉ thị `-boundscheck=off`:
+việc này có thể giúp chương trình chạy nhanh hơn với cái giá phải trả
+là sự mất an toàn :)
 
-#### Static arrays
+#### Mảng tĩnh
 
-Static arrays are stored on the stack if defined inside a function,
-or in static memory otherwise. They have a fixed,
-compile-time known length. A static array's type includes
-the fixed size:
+Vùng nhớ cấp phát cho mảng tĩnh bên trong một hàm nằm trên bộ nhớ `stack`,
+còn cho các mảng tĩnh khác thì thuộc về vùng nhớ tĩnh.
+Lý do là mảng tĩnh có kích thước _(bộ nhớ)_ cố định mà trình
+biên dịch có thể biết được ngay. Ví dụ với khai báo
 
     int[8] arr;
 
-`arr`'s type is `int[8]`. Note that the size of the array is denoted
-next to the type, and not after the variable name like in C/C++.
+thì `arr` kiểu `int[8]`. Trái với C/++, kích thước được chỉ ra ngay sau
+kiểu của từng phần tử trong mảng.
 
-#### Dynamic arrays
+#### Mảng động
 
-Dynamic arrays are stored on the heap and can be expanded
-or shrunk at runtime. A dynamic array is created using a `new` expression
-and its length:
+Vùng nhớ cấp phát cho mảng động nằm trên `heap`, và có thể co dãn
+lúc chương trình đang chạy. Mảng động được khai báo với `new`
 
-    int size = 8; // run-time variable
+    int size = 8; // biến thay đổi lúc chạy
     int[] arr = new int[size];
 
-The type of `arr` is `int[]`, which is also called a **slice**. Slices
-are views on a contiguous block of memory and will be explained
-in more detail in the [next section](basics/slices).
-Multi-dimensional arrays can be created easily
-using the `auto arr = new int[3][3]` syntax.
+Kiểu của `arr` là `int[]`, là một _lát cắt_ trên bộ nhớ.
+Chi tiết về lát cắt có trong [phần sau](basics/slices);
+tạm thời bạn hiểu đó là một khối liên tục trên bộ nhớ máy tính.
 
-#### Array operations and properties
+Mảng nhiều chiều được khai báo như trong ví dụ `auto arr = new int[3][3]`.
 
-Arrays can be concatenated using the `~` operator, which
-will create a new dynamic array.
+#### Phép toán và thuộc tính trên mảng
 
-Mathematical operations can
-be applied to whole arrays using a syntax like `c[] = a[] + b[]`, for example.
-This adds all elements of `a` and `b` so that
-`c[0] = a[0] + b[0]`, `c[1] = a[1] + b[1]`, etc. It is also possible
-to perform operations on a whole array with a single
-value:
+Dùng `~` để nối hai mảng với nhau, kết quả là mảng động mới.
 
-    a[] *= 2; // multiple all elements by 2
-    a[] %= 26; // calculate the modulo by 26 for all a's
+Các phép toán cơ bản như cộng, trừ, ... có thể áp dụng trên toàn bộ mảng
+có cú pháp đơn giản như ví dụ  `c[] = a[] + b[]`; trong ví dụ này,
+kết quả là mảng `c` sao cho
+`c[0] = a[0] + b[0]`, `c[1] = a[1] + b[1]`, v.v...
+Bạn cũng có thể dùng cú pháp sau
 
-These operations might be optimized
-by the compiler to use special processor instructions that
-do the operations in one go.
+    a[] *= 2; // nhân mỗi phần tử với 2
+    a[] %= 26; // chia mô-đun-lô mỗi phần từ cho 26
 
-Both static and dynamic arrays provide the property `.length`,
-which is read-only for static arrays, but can be used in the case of
-dynamic arrays to change its size dynamically. The
-property `.dup` creates a copy of the array.
+Các phép toán kiểu này có thể được trình biên dịch lựa chọn dịch qua
+các mã máy sử dụng các chỉ thị đặc biệt của bộ vi xử lý có hỗ trợ
+tính toán trên mảng.
 
-When indexing an array through the `arr[idx]` syntax, a special
-`$` symbol denotes an array's length. For example, `arr[$ - 1]` references
-the last element and is a short form for `arr[arr.length - 1]`.
+Cả mảng động và tĩnh đều có thuộc tính `.length` chỉ kích thước
+(số phần tử) của mảng. Đối với mảng tĩnh, thuộc tính đó chỉ để đọc,
+không thể thay đổi. Với mảng động, có thể dùng `.length` để co dãn mảng.
 
-### Exercise
+Thuộc tính `.dup` sao chép một mảng (việc sao chép trên bộ nhớ thực sự diễn ra nhé!)
 
-Complete the function `encrypt` to encrypt the secret message.
-The text should be encrypted using *Caesar encryption*,
-which shifts the characters in the alphabet using a certain index.
-The to-be-encrypted text only contains characters in the range `a-z`,
-which should make things easier.
+Mỗi phần tử của mảng được truy cập nhờ cú pháp chỉ số  `arr[idx]`.
+Thay cho `.length` bạn có thể dùng ký hiệu tắt `$`, ví dụ `arr[$ - 1]`
+tương đương với `arr[arr.length - 1]` là phần tử cuối cùng bên phải của mảng.
 
-You can browse the solution [here](https://github.com/dlang-tour/core/issues/227).
+### Bài tập
 
-### In-depth
+Hoàn thiện hàm `encrypt` để mã hóa tin đầu vào theo kiểu [*Caesar*](https://vi.wikipedia.org/wiki/M%E1%BA%ADt_m%C3%A3_Caesar).
+Để đơn giản, ta giả định rằng tin đầu vào chỉ gồm các ký tự trong dải từ `a` tới `z`.
 
-- [Arrays in _Programming in D_](http://ddili.org/ders/d.en/arrays.html)
-- [D Slices](https://dlang.org/d-array-article.html)
-- [Array specification](https://dlang.org/spec/arrays.html)
+Lời giải tham khảo [có ở đây](https://github.com/dlang-tour/core/issues/227).
+
+### Đọc thêm
+
+- [Mảng trong sách _Programming in D_](http://ddili.org/ders/d.en/arrays.html)
+- [Lát cắt trong D](https://dlang.org/d-array-article.html)
+- [Đặc tả mảng](https://dlang.org/spec/arrays.html)
 
 ## {SourceCode:incomplete}
 
@@ -85,40 +82,38 @@ You can browse the solution [here](https://github.com/dlang-tour/core/issues/227
 import std.stdio : writeln;
 
 /**
-Shifts every character in the
-array `input` for `shift` characters.
-The character range is limited to `a-z`
-and the next character after z is a.
+Dịch chuyển mỗi ký tự đầu `shift` vị trí.
+Đầu vào chỉ gồm ký tự trong dải `a-z`.
+Khi dịch chuyển tới `z` thì quay lại
+từ đầu (đến `a`)
 
-Params:
-    input = array to shift
-    shift = shift length for each char
-Returns:
-    Shifted char array
+Tham số:
+    input = mảng cần dịch
+    shift = số vị trí cần dịch chuyển
+Trả về:
+    Mảng với mỗi phần từ đã được dịch chuyển
 */
 char[] encrypt(char[] input, char shift)
 {
     auto result = input.dup;
-    // TODO: shift each character
+    // TODO: dịch chuyển từng phần tử của mảng
     return result;
 }
 
 void main()
 {
-    // We will now encrypt the message with
-    // Caesar encryption and a
-    // shift factor of 16!
+    // Mã hóa kiểu Caesar, dịch 16 vị trí
     char[] toBeEncrypted = [ 'w','e','l','c',
       'o','m','e','t','o','d',
-      // The last , is okay and will just
-      // be ignored!
+      // Dấu phảy , cuối cùng được
+      // trình biên dịch bỏ qua
     ];
     writeln("Before: ", toBeEncrypted);
     auto encrypted = encrypt(toBeEncrypted, 16);
     writeln("After: ", encrypted);
 
-    // Make sure we the algorithm works
-    // as expected
+    // Kiểm tra lại xem kết quả
+    // có đúng như mong đợi không.
     assert(encrypted == [ 'm','u','b','s','e',
             'c','u','j','e','t' ]);
 }
