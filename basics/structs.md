@@ -1,7 +1,9 @@
-# Structs
+# Dữ liệu ghép
 
-One way to define compound or custom types in D is to
-define them through a `struct`:
+_(hay kiểu Struct)_
+
+Như trong `C` bạn có thể dùng `struct` để tạo ra kiểu dữ liệu mới
+_ghép_ các kiểu dữ liệu cơ bản cùng nhau
 
     struct Person {
         int age;
@@ -9,17 +11,18 @@ define them through a `struct`:
         float ageXHeight;
     }
 
-`struct`s are always constructed on the stack (unless created
-with `new`) and are copied **by value** in assignments or
-as parameters to function calls.
+Biến `struct` được khởi tạo trong vùng nhớ `stack` (trừ khi biến được
+khai báo với `new`), và trong các phép gán hay truyền tham số cho hàm,
+giá trị _(không phải tham chiếu con trỏ)_ của biến được sử dụng.
+Thuật ngữ tiếng Anh là *copy-by-value*.
 
     auto p = Person(30, 180, 3.1415);
-    auto t = p; // copy
+    auto t = p; // chép theo giá trị
 
-When a new object of a `struct` type is created, its members can be initialized
-in the order they are defined in the `struct`. A custom constructor can be defined through
-a `this(...)` member function. If needed to avoid name conflicts, the current instance
-can be explicitly accessed with `this`:
+Khi đối tượng kiểu ghép được tạo, mỗi thành phần được tạo theo thứ tự
+đã chỉ ra khi định nghĩa kiểu ghép đó. Việc khởi tạo các thành phần này
+cũng có thể được thực hiện bên trong hàm `this(...)`, nơi các thành phần
+được gọi theo tên `BIẾN` hay theo kiểu tường minh `this.BIẾN`.
 
     struct Person {
         this(int age, int height) {
@@ -29,14 +32,13 @@ can be explicitly accessed with `this`:
         }
             ...
 
-    Person p = Person(30, 180); // initialization
-    p = Person(30, 180);  // assignment to new instance
+    Person p = Person(30, 180); // khởi tạo
+    p = Person(30, 180);  // gán cho nhân bản mới
 
-A `struct` might contain any number of member functions. These
-are by default `public` and accessible from the outside. They could
-also be `private` and thus only be callable by other
-member functions of the same `struct`, or other code in the same
-module.
+Kiểu ghép cũng cho phép ghép các hàm. Hàm thành phần mặc định có thuộc
+tính công cộng (`public`) nên có thể sử dụng trực tiếp từ bên ngoài
+định nghĩa của kiểu ghép. Ngược lại, bạn cần dùng từ khóa `private`
+để áp đặt sự riêng tư của hàm thành phần.
 
     struct Person {
         void doStuff() {
@@ -44,52 +46,48 @@ module.
         private void privateStuff() {
             ...
 
-    p.doStuff(); // call method doStuff
-    p.privateStuff(); // forbidden
+    p.doStuff(); // thoải mái
+    p.privateStuff(); // bị cấm
 
-### Const member functions
+### Thành phần hàm hằng
 
-If a member function is declared with `const`, it won't be allowed
-to modify any of its members. This is enforced by the compiler.
-Making a member function `const` makes it callable on any `const`
-or `immutable` object, but also guarantees to callers that
-the member function will never change the state of the object.
+Hàm thành phần trong kiểu ghép có thể được khai báo với từ khóa `const`
+(hằng). Các hàm này không thể thay đổi các biến thành phần của kiểu ghép.
+Hàm hằng có thể  gọi với đầu vào là đối tượng hằng hay bất biến khác,
+nhưng chắc chắn hàm đó không thể thay đổi trạng thái của đối tượng.
 
-### Static member functions
+### Thành phần hàm tĩnh
 
-If a member function is declared as `static`, it will be callable
-without an instantiated object (e.g. `Person.myStatic()`) but it
-isn't allowed to access any non-`static` members.  It can be used if a
-method doesn't need to access any of the object member fields but logically
-belongs to the same class. Also it can be used to provide some functionality
-without creating an explicit instance, for example, some Singleton
-design pattern implementations use `static`.
+Khi hàm thành phần được khai báo với `static`, nó có thể được gọi thông
+qua tên của kiểu ghép mà không cần thông qua đối tượng cụ thể của kiểu,
+ví dụ `Person.myStatic()`.
+Rõ ràng, hàm tĩnh không thể truy cập các biến không được khai báo tĩnh.
+Có nhiều ứng dụng sử dụng hàm tĩnh, ví dụ khi triển khai các kiểu `Singleton`.
 
-### Inheritance
+### Thừa kế
 
-Note that a `struct` can't inherit from another `struct`.
-Hierachies of types can only be built using classes,
-which we will see in a future section.
-However, with `alias this` or `mixins` one can easily achieve
-polymorphic inheritance.
+Không thể nói tới thừa kế với các kiểu ghép.
+Thừa kế chỉ áp dụng đối với các lớp (`class`) mà ta đề cập sau.
+Tuy nhiên, việc dùng `alias this` hoặc `mixins` có thể giúp
+đạt được mức thừa kế đa hình.
 
-### In-depth
+### Đọc thêm
 
-- [Structs in _Programming in D_](http://ddili.org/ders/d.en/struct.html)
-- [Struct specification](https://dlang.org/spec/struct.html)
+- [Kiểu ghép trong sách _Programming in D_](http://ddili.org/ders/d.en/struct.html)
+- [Đặc tả kiểu ghép](https://dlang.org/spec/struct.html)
 
-### Exercise
+### Bài tập
 
-Given the `struct Vector3`, implement the following functions and make
-the example application run successfully:
+Với kiểu ghép `struct Vector3`, hãy viết các hàm sau và đảm bảo ví dụ
+chạy thành công:
 
-* `length()` - returns the vector's length
-* `dot(Vector3)` - returns the dot product of two vectors
-* `toString()` - returns a string representation of this vector.
-  The function [`std.string.format`](https://dlang.org/phobos/std_format.html)
-  returns a string using `printf`-like syntax:
-  `format("MyInt = %d", myInt)`. Strings will be explained in detail in a later
-  section.
+* `length()` - trả về chiều dài vector
+* `dot(Vector3)` - trả về tích chấm của hai vector
+* `toString()` - biểu diễn vector ở dạng chuỗi
+  Hàm [`std.string.format`](https://dlang.org/phobos/std_format.html)
+  trả về chuỗi nhờ cú pháp tương tự  hàm `printf`:
+  `format("MyInt = %d", myInt)`.
+  Chuỗi sẽ được mô tả chi tiết trong các phần sau.
 
 ## {SourceCode:incomplete}
 
@@ -101,13 +99,13 @@ struct Vector3 {
 
     double length() const {
         import std.math : sqrt;
-        // TODO: implement the length of Vector3
+        // TODO: trả về chiều dài Vector3
         return 0.0;
     }
 
     // rhs will be copied
     double dot(Vector3 rhs) const {
-        // TODO: implement the dot product
+        // TODO: triển khai tích chấm
         return 0.0;
     }
 }
@@ -119,12 +117,12 @@ void main() {
     vec2.y = 20;
     vec2.z = 0;
 
-    // If a member function has no parameters,
-    // the calling braces () may be omitted
+    // Bỏ qua () khi hàm không nhận
+    // tham số đầu vào
     assert(vec1.length == 10);
     assert(vec2.length == 20);
 
-    // Test the functionality for dot product
+    // Kiểm tra tính đúng đắn của tích chấm
     assert(vec1.dot(vec2) == 0);
 
     // 1 * 1 + 2 * 1 + 3 * 1

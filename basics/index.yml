@@ -6,7 +6,7 @@ ordering:
 - type-qualifiers
 - controlling-flow
 - functions
-# - structs
+- structs
 # - arrays
 # - slices
 # - alias-strings
