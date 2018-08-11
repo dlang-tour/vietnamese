@@ -1,56 +1,61 @@
-# Slices
+# Lát cắt
 
-Slices are objects from type `T[]` for any given type `T`.
-Slices provide a view on a subset of an array
-of `T` values - or just point to the whole array.
-**Slices and dynamic arrays are the same.**
+Cần hiểu là **lát cắt** và **mảng động** là một.
 
-A slice consists of two members - a pointer to the starting element and the
-length of the slice:
+Lát cắt được khai báo ở dạng `T[]` với `T` là bất kỳ kiểu nào.
+Lát cắt có thể xem như một phần (hay toàn bộ) của mảng,
+luôn bao gồm hai yếu tố: con trỏ đến nơi bắt đầu,
+và chiều dài của lát cắt (hay điểm kết thúc).
+Như thế, lát cắt là khối bộ nhớ liên tục:
 
     T* ptr;
-    size_t length; // unsigned 32 bit on 32bit, unsigned 64 bit on 64bit
+    size_t length; // trên máy 32 bit, là kiểu không dấu 32 bit
+                   // trên máy 64 bit, là kiểu không dấu 64 bit
 
-### Getting a slice via new allocation
+### Lát cắt trên vùng nhớ mới cấp
 
-If a new dynamic array is created, a slice to this freshly
-allocated memory is returned:
+Khi mảng động được tạo ra, kết quả trả về thực chất là lát cắt
 
     auto arr = new int[5];
-    assert(arr.length == 5); // memory referenced in arr.ptr
+    assert(arr.length == 5); // địa chỉ bắt đầu cho bởi arr.ptr
 
-Actual allocated memory in this case is completely managed by the garbage
-collector. The returned slice acts as a "view" on underlying elements.
+Bộ dọn rác sẽ quản lý việc cấp phát bộ nhớ cho các lát cắt.
+Kết quả trả về giống như là "lăng kính" nhìn vào ô nhớ.
 
-### Getting a slice to existing memory
+### Lát cắt trên vùng nhớ đã cấp
 
-Using a slicing operator one can also get a slice pointing to some already
-existing memory. The slicing operator can be applied to another slice, static
-arrays, structs/classes implementing `opSlice` and a few other entities.
+"Lăng kính" có thể trỏ vào bất kỳ chỗ nào, cụ thể là vào vùng nhớ đã cấp
+(dù nó là động hay tĩnh); tổng quát hơn, trong D, các đối tượng nào có
+thế áp dụng toán tử `opSlice` đều có thể xem qua "lăng kính", hay "lát cắt".
 
-In an example expression `origin[start .. end]` the slicing operator is used to get
-a slice of all elements of `origin` from `start` to the element _before_ `end`:
+Lát cắt hay có dạng tường minh `TÊN_NÀO_ĐÓ[bắt đầu .. kết thúc]`:
 
-    auto newArr = arr[1 .. 4]; // index 4 is NOT included
+    auto newArr = arr[1 .. 4]; // thành phần thứ 4 không được tính
     assert(newArr.length == 3);
-    newArr[0] = 10; // changes newArr[0] aka arr[1]
+    newArr[0] = 10; // thay đổi newArr[0] hay arr[1]
 
-Such slices generate a new view on existing memory. They *don't* create
-a new copy. If no slice holds a reference to that memory anymore - or a *sliced*
-part of it - it will be freed by the garbage collector.
+Vì chỉ là "lăng kính", việc tạo lăng kính mới, hay xem qua "lăng kính"
+không làm thay đổi thực chất, hay nói cách khác không có thay đổi nào trên
+vùng nhớ đã cấp; cũng như vậy, việc thay đổi (nếu có) không chỉ diễn ra hời
+hợt trên "lăng kính", mà thay đổi vùng nhớ thật sự và tất cả các "lăng kính"
+cùng trỏ tới một vùng nhớ sẽ ngay lập tức thay sự thay đổi.
 
-Using slices, it's possible to write very efficient code for things (like parsers, for example)
-that only operate on one memory block, and slice only the parts they really need
-to work on. In this way, there's no need to allocate new memory blocks.
+Nếu không có "lăng kính" nào cùng xem một vùng nhớ, nghĩa là vùng nhớ đó
+bị bỏ rơi, không ai quan tâm, và sẽ được bộ dọn rác tóm lấy và giải phóng.
 
-As seen in the [previous section](basics/arrays), the `[$]` expression is a shorthand form for
-`arr.length`. Hence `arr[$]` indexes the element one past the slice's end, and
-thus would generate a `RangeError` (if bounds-checking hasn't been disabled).
+Việc dùng lát cắt có hiệu quả khi bạn cần thay đổi trên một phần bộ nhớ
+trong dải (liên tục) đã được cấp phát, với ý ghi trong đầu rằng sẽ
+không phải cấp phát thêm phần bộ nhớ nào cho các đối tượng sẵn có.
 
-### In-depth
+Trong phần giới thiệu [về các mảng](basics/arrays), dấu tắt `[$]`
+chỉ độ dài của mảng, ví dụ `arr.length`. Với các lát cắt cũng vậy, `arr[$]`
+trỏ vào vùng nhớ ngay sau phần đã cấp cho toàn bộ mảng. Truy xuất như vậy
+sẽ phát sinh lỗi  `RangeError` như đã nói đến.
 
-- [Introduction to Slices in D](http://dlang.org/d-array-article.html)
-- [Slices in _Programming in D_](http://ddili.org/ders/d.en/slices.html)
+### Đọc thêm
+
+- [Giới thiệu về lát cắt trong D](http://dlang.org/d-array-article.html)
+- [Lát cắt trong sách _Programming in D_](http://ddili.org/ders/d.en/slices.html)
 
 ## {SourceCode}
 
@@ -61,20 +66,20 @@ void main()
 {
     int[] test = [ 3, 9, 11, 7, 2, 76, 90, 6 ];
     test.writeln;
-    writeln("First element: ", test[0]);
-    writeln("Last element: ", test[$ - 1]);
-    writeln("Exclude the first two elements: ",
+    writeln("Phần tử đầu tiên: ", test[0]);
+    writeln("Phần tử cuối cùng: ", test[$ - 1]);
+    writeln("Bỏ qua hai phần tử đầu tiên: ",
         test[2 .. $]);
 
-    writeln("Slices are views on the memory:");
+    writeln("Lát cắt chỉ là lăng kính:");
     auto test2 = test;
     auto subView = test[3 .. $];
-    test[] += 1; // increment each element by 1
+    test[] += 1; // thêm 1 vào phần tử đầu tiên
     test.writeln;
     test2.writeln;
     subView.writeln;
 
-    // Create an empty slice
+    // Lăng kính nghèo nàn, chẳng có gì để xem
     assert(test[2 .. 2].length == 0);
 }
 ```
