@@ -104,7 +104,7 @@ Còn nhiều cách khác để biểu diễn chuỗi [bạn có thể xem ở đ
 - [Chuỗi trong sách _Programming in D_](http://ddili.org/ders/d.en/strings.html)
 - [std.utf](http://dlang.org/phobos/std_utf.html) - UTF en-/decoding algorithms
 - [std.uni](http://dlang.org/phobos/std_uni.html) - Unicode algorithms
-- [String Literals in the D spec](http://dlang.org/spec/lex.html#string_literals)
+- [Đặc tả biểu diễn chuỗi](http://dlang.org/spec/lex.html#string_literals)
 
 ## {SourceCode}
 
