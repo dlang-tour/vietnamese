@@ -1,11 +1,10 @@
-# Loops
+# Phép lặp
 
-D provides four loop constructs.
+Có bốn phép lặp trong D.
 
 ### 1) `while`
 
-`while`  loops execute the given code block
-while a certain condition is met:
+`while` bắt đầu phép lặp sau khi kiểm tra điều kiện:
 
     while (condition)
     {
@@ -14,20 +13,18 @@ while a certain condition is met:
 
 ### 2) `do ... while`
 
-The `do .. while` loops execute the given code block
-while a certain condition is met, but in contrast to `while`
-the _loop block_ is executed before the loop condition is
-evaluated for the first time.
+`do .. while` thực hiện phép lặp rồi mới kiểm tra điều kiện.
+Như vậy, phép lặp luôn chạy được ít nhất một vòng.
 
     do
     {
         foo();
     } while (condition);
 
-### 3) Classical `for` loop
+### 3) Lặp với `for`
 
-The classical `for` loop known from C/C++ or Java
-with _initializer_, _loop condition_ and _loop statement_:
+`for` được xem là phép lặp truyền thống, bắt đầu từ C/C++ hay Java.
+Mỗi phép lặp bao gồm _giá trị ban đầu_, _điều kiện_ và _biểu thức lặp_.
 
     for (int i = 0; i < arr.length; i++)
     {
@@ -35,33 +32,33 @@ with _initializer_, _loop condition_ and _loop statement_:
 
 ### 4) `foreach`
 
-The [`foreach` loop](basics/foreach) which will be introduced in more detail
-in the next section:
+Tạm thời ở đây chỉ đưa ra cú pháp của [`foreach`](basics/foreach),
+còn chi tiết sẽ có ở các phần sau.
 
     foreach (el; arr)
     {
         ...
     }
 
-#### Special keywords and labels
+#### Thoát vội vòng lặp
 
-The special keyword `break` will immediately abort the current loop.
-In a nested loop a _label_ can be used to break out of any outer loop:
+Dùng `break` khi cần thoát ngay ra khỏi vòng đang lặp.
+Nếu muốn thoát ra nhiều vòng khác cùng lúc thì có thể dùng nhãn:
 
-    outer: for (int i = 0; i < 10; ++i)
+    NHÃN_THOÁT: for (int i = 0; i < 10; ++i)
     {
         for (int j = 0; j < 5; ++j)
         {
             ...
-            break outer;
+            break NHÃN_THOÁT;
 
-The keyword `continue` starts with the next loop iteration.
+Dùng `continue` để bỏ qua vòng lặp hiện tại và bắt đầu ngay vòng kế tiếp.
 
-### In-depth
+### Đọc thêm
 
-- `for` loop in [_Programming in D_](http://ddili.org/ders/d.en/for.html), [specification](https://dlang.org/spec/statement.html#ForStatement)
-- `while` loop in [_Programming in D_](http://ddili.org/ders/d.en/while.html), [specification](https://dlang.org/spec/statement.html#WhileStatement)
-- `do-while` loop in [_Programming in D_](http://ddili.org/ders/d.en/do_while.html), [specification](https://dlang.org/spec/statement.html#do-statement)
+- `for` trong sách [_Programming in D_](http://ddili.org/ders/d.en/for.html), [specification](https://dlang.org/spec/statement.html#ForStatement)
+- `while` trong sách [_Programming in D_](http://ddili.org/ders/d.en/while.html), [specification](https://dlang.org/spec/statement.html#WhileStatement)
+- `do-while` trong sách [_Programming in D_](http://ddili.org/ders/d.en/do_while.html), [specification](https://dlang.org/spec/statement.html#do-statement)
 
 ## {SourceCode}
 
@@ -69,8 +66,8 @@ The keyword `continue` starts with the next loop iteration.
 import std.stdio : writeln;
 
 /*
-Computes the average of
-the elements of an array.
+Tính trung bình
+các phần tử trong mảng.
 */
 double average(int[] array)
 {
@@ -78,8 +75,8 @@ double average(int[] array)
     double accumulator = 0.0;
     while (array.length)
     {
-        // this could be also done with .front
-        // with import std.array : front;
+        // Cũng có thể dùng .front
+        //  import std.array : front;
         accumulator += array[0];
         array = array[1 .. $];
     }
@@ -95,7 +92,7 @@ void main()
 
     for (auto i = 0; i < testers.length; ++i)
     {
-      writeln("The average of ", testers[i],
+      writeln("Giá trị trung bình ", testers[i],
         " = ", average(testers[i]));
     }
 }
