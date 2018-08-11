@@ -19,3 +19,5 @@ echo "<progress max=\"100\" value=\"$_PERCENT\"><strong>Progress: $_PERCENT% don
   > "progress.html"
 
 wkhtmltoimage progress.html progress.svg
+sed -i -e '/viewBox=/d' progress.svg
+sed -i -e 's/<svg width=.*/<svg/' progress.svg
