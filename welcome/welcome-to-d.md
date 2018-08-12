@@ -51,7 +51,7 @@ Bạn có thể tới ngay mục cần xem nhờ menu phía trên.
 
 Bạn luôn có thể hoàn thiện tài liệu dạo đầu này bằng cách
 tham gia vào dự án [https://github.com/dlang-tour](https://github.com/dlang-tour)
-trên Github.
+trên Github. Bản dịch Việt ngữ có dự án riêng ở [dlang-tour/vietnamese](https://github.com/dlang-tour/vietnamese/.)
 
 ## {SourceCode}
 
