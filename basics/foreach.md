@@ -2,77 +2,81 @@
 
 {{#img-right}}dman-teacher-foreach.jpg{{/img-right}}
 
-D features a `foreach` loop which allows
-less error-prone and better readable iterations.
+Phép lặp `foreach` dễ nhìn hơn và hạn chế những sai sót vặt.
 
-### Element iteration
+### Quét cạn mọi phần tử
 
-Given an array `arr` of type `int[]` it is possible to
-iterate through the elements using a `foreach` loop:
+Có thể dùng `foreach` để quét cạn mọi phần tử của mảng `arr` kiểu `int[]`:
 
     foreach (int e; arr) {
         writeln(e);
     }
 
-The first field in the `foreach` definition is the variable
-name used in the loop iteration. Its type is induced automatically:
+Chỗ `int e` ngay sau `foreach` là tên biến đại diện cho phần tử của mảng
+trong mỗi lần lặp. Bạn không cần khai báo kiểu cho biến đó:
 
     foreach (e; arr) {
-        // typeof(e) is int
+        // typeof(e) trả về int
         writeln(e);
     }
 
-The second field must be an array - or a special iterable
-object called a **range** which will be introduced in the [next section](basics/ranges).
+Chỗ còn lại hiển nhiên là chính mảng `arr`, hoặc là đối tượng có thể
+chịu tác động bởi phép lặp mà sau này ta gọi tên là `dải` như
+[trong phần tiếp](basics/ranges).
 
-### Access by reference
+### Lặp nhờ con trỏ tham chiếu
 
-Elements will be copied from the array or range during iteration.
-This is acceptable for basic types, but might be a problem for
-large types. To prevent copying or to enable *in-place
-*mutation, `ref` can be used:
+Trong ví dụ về phép lặp `foreach (int e; arr)` ở phần ở trên,
+mỗi lần lặp việc sao chép giá trị (`copy by value`) được thực hiện:
+cách sao chép này gây tốn kém bộ nhớ đáng kể với các kiểu ghép phức tạp.
+
+Lường trước vấn đề này, D cho phép lặp nhờ con trỏ tham chiếu tới phần tử
+của mảng:
 
     foreach (ref e; arr) {
-        e = 10; // overwrite value
+        e = 10; // sau phép gán này
+                // arr bị thay đổi
     }
 
-### Iterate `n` times
+### Nhấn mạnh số lần lặp
 
-D allows to write iterations which should be executed
-`n` times, more concisely with the `..` syntax:
+Để nhấn mạnh số lần có thể lặp, bạn có thể dùng cú pháp `..` như sau:
 
     foreach (i; 0 .. 3) {
         writeln(i);
     }
     // 0 1 2
 
-The last number in `a .. b` is excluded from the range,
-thus the loop body is executed `3` times.
+Như thế `a .. b` là một dải các số nguyên, trừ số cuối cùng `b`.
+Số vòng lặp tối đa là `b - a`.
 
-### Iteration with index counter
+### Nhấn mạnh thứ tự vòng lặp
 
-For arrays, it's also possible to access a separate index variable.
+Bạn có thể khai báo biến để D tự ghi vào đó thứ tự vòng lặp:
 
     foreach (i, e; [4, 5, 6]) {
         writeln(i, ":", e);
     }
     // 0:4 1:5 2:6
 
-### Reverse iteration with `foreach_reverse`
+Ở đây, `i` sẽ lần lượt nhận giá trị `0`, `1`, ... khi ở vòng lặp đầu tiên,
+thứ hai, ...
 
-A collection can be iterated in reverse order with
-`foreach_reverse`:
+### Lặp từ cuối với `foreach_reverse`
+
+Bạn có thể bắt đầu các vòng lặp từ phần tử cuối cùng của mảng
+thay vì phần từ đầu tiên:
 
     foreach_reverse (e; [1, 2, 3]) {
         writeln(e);
     }
     // 3 2 1
 
-### In-depth
+### Đọc thêm
 
-- [`foreach` in _Programming in D_](http://ddili.org/ders/d.en/foreach.html)
-- [`foreach` with Structs and Classes  _Programming in D_](http://ddili.org/ders/d.en/foreach_opapply.html)
-- [`foreach` specification](https://dlang.org/spec/statement.html#ForeachStatement)
+- [`foreach` trong sách _Programming in D_](http://ddili.org/ders/d.en/foreach.html)
+- [`foreach` với kiểu ghép và lớp trong sách _Programming in D_](http://ddili.org/ders/d.en/foreach_opapply.html)
+- [Đặc tả `foreach`](https://dlang.org/spec/statement.html#ForeachStatement)
 
 ## {SourceCode}
 
