@@ -13,6 +13,7 @@ Khúc dạo đầu về *Dlang* được dịch qua các ngôn ngữ khác:
 - [Swedish - Svenska](https://tour.dlang.org/tour/sv/welcome/welcome-to-d) (chưa hoàn thiện)
 - [Turkish - Türkçe](https://tour.dlang.org/tour/tr/welcome/welcome-to-d) (chưa hoàn thiện)
 - [Ukrainian - Українська](https://tour.dlang.org/tour/uk/welcome/welcome-to-d)
+- [Vietnamese - Tiếng Việt](https://tour.dlang.org/tour/vi/welcome/welcome-to-d) (<img width=200px src="https://raw.githubusercontent.com/dlang-tour/vietnamese/master/_utils/progress.svg?sanitize=true" alt="WIP">)
 
 Để đọc bảng tiếng Anh, hãy chọn "Next" hoặc phím mũi tên phải.
 
