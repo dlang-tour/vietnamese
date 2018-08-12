@@ -4,6 +4,7 @@ Khúc dạo đầu về DLang
 ... hay là phiên bản tiếng Việt của Dlang Tour.
 
 [![Build Status](https://travis-ci.org/dlang-tour/vietnamese.svg?branch=master)](https://travis-ci.org/dlang-tour/vietnamese)
+![Build Progress](https://raw.githubusercontent.com/dlang-tour/vietnamese/master/_utils/progress.svg?sanitize=true)
 
 Bạn đang đọc chỉ dẫn đầu tiên của dự án chuyển ngữ DLang Tour.
 Kết quả của dự án có ở trang web
