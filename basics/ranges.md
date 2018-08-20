@@ -1,6 +1,11 @@
-# Ranges
+# Dải
 
-If a `foreach` is encountered by the compiler
+**ND:** Trong phần này, `range` được dịch là `dải`, thay vì `dãy`.
+Trong Dlang, `dãy` hay `mảng` chỉ là trường hợp đặc biệt của `dải`.
+Khi dùng `dải`, ta quan tâm tính tính toàn vẹn của đối tượng hơn
+là các thành phần riêng lẽ.
+
+Trình biên dịch Dlang chuyển mã nguồn `foreach`
 
 ```
 foreach (element; range)
@@ -9,7 +14,7 @@ foreach (element; range)
 }
 ```
 
-it's internally rewritten similar to the following:
+sang dạng như sau
 
 ```
 for (auto __rangeCopy = range;
@@ -17,12 +22,12 @@ for (auto __rangeCopy = range;
      __rangeCopy.popFront())
  {
     auto element = __rangeCopy.front;
-    // Loop body...
+    // thân vòng lặp...
 }
 ```
 
-Any object which fulfills the following interface is called a **range**
-(or more specific `InputRange`) and is thus a type that can be iterated over:
+Tổng quát hơn, đối tượng `dải` (hay `dải đầu vào` `InputRange`)
+có cấu trúc tương tự như sau đều có thể dùng với phép `lặp`:
 
 ```
     interface InputRange(E)
@@ -33,22 +38,22 @@ Any object which fulfills the following interface is called a **range**
     }
 ```
 
-Have a look at the example on the right to inspect the implementation and usage
-of an input range closer.
+Khó hiểu? Hãy xem thêm vài ví dụ trong mã nguồn đi kèm phần này.
 
-## Laziness
+## Gọi theo nhu cầu
 
-Ranges are __lazy__. They won't be evaluated until requested.
-Hence, a range from an infinite range can be taken:
+Phần tử của dải được tính toán chỉ khi việc đó thật sự cần.
+Tính chất là gọi là `lazy` (lười), hay `call-by-need` (gọi theo nhu cầu),
+gặp nhiều trong các ngôn ngữ lập trình hàm.
 
 ```d
 42.repeat.take(3).writeln; // [42, 42, 42]
 ```
 
-## Value vs. Reference types
+## Tham chiếu con trỏ hoặc giá trị
 
-If the range object is a value type, then range will be copied and only the copy
-will be consumed:
+Nếu dải gồm các giá trị, việc sử dụng dải sẽ được thực hiện trên bản sao
+của các giá trị đó:
 
 ```d
 auto r = 5.iota;
@@ -56,8 +61,9 @@ r.drop(5).writeln; // []
 r.writeln; // [0, 1, 2, 3, 4]
 ```
 
-If the range object is a reference type (e.g. `class` or [`std.range.refRange`](https://dlang.org/phobos/std_range.html#refRange)),
-then the range will be consumed and won't be reset:
+Nếu dải gồm các tham chiếu, ví dụ là các `lớp`
+hoặc [dải tham chiếu](https://dlang.org/phobos/std_range.html#refRange),
+thì việc sử dụng dải có thể ảnh hưởng, thay đổi giá trị các phần tử trong dải:
 
 ```d
 auto r = 5.iota;
@@ -66,12 +72,12 @@ r2.drop(5).writeln; // []
 r2.writeln; // []
 ```
 
-### Copyable `InputRanges` are `ForwardRanges`
+### Dải chuyển tiếp `ForwardRanges`
 
-Most of the ranges in the standard library are structs and so `foreach`
-iteration is usually non-destructive, though not guaranteed. If this
-guarantee is important, an specialization of an `InputRange` can be used—
-**forward** ranges with a `.save` method:
+Hầu hết các dải trong thư viện Dlang tiêu chuẩn là kiểu ghép (`struct`)
+và việc dùng `foreach` sẽ không thay đổi hay hủy hoại dải, nhưng điều này
+không được đảm bảo. Nếu cần chắc chắn dải đầu vào (`InputRange`) không
+bị suy chuyển, bạn có thể dùng dải chuyển tiếp với hàm `.save`:
 
 ```
 interface ForwardRange(E) : InputRange!E
@@ -81,18 +87,18 @@ interface ForwardRange(E) : InputRange!E
 ```
 
 ```d
-// by value (Structs)
+// theo giá trị (Structs)
 auto r = 5.iota;
 auto r2 = refRange(&r);
 r2.save.drop(5).writeln; // []
 r2.writeln; // [0, 1, 2, 3, 4]
 ```
 
-### `ForwardRanges` can be extended to Bidirectional ranges + random access ranges
+### Dải chuyển tiếp với truy cập hai chiều hoặc ngẫu nhiên
 
-There are two extensions of the copyable `ForwardRange`: (1) a bidirectional range
-and (2) a random access range.
-A bidirectional range allows iteration from the back:
+Có thể mở rộng dải chuyển tiếp để truy cập hai chiều, hoặc truy cập ngẫu nhiên:
+
+Với truy cập hai chiều, có thể duyệt _(tuần tự)_ các phần từ của dải từ cuối;
 
 ```d
 interface BidirectionalRange(E) : ForwardRange!E
@@ -106,7 +112,7 @@ interface BidirectionalRange(E) : ForwardRange!E
 5.iota.retro.writeln; // [4, 3, 2, 1, 0]
 ```
 
-A random access range has a known `length` and each element can be directly accessed.
+Với truy cập ngẫu nhiên, dải cần có chiều dài `length` xác định
 
 ```d
 interface RandomAccessRange(E) : ForwardRange!E
@@ -116,26 +122,24 @@ interface RandomAccessRange(E) : ForwardRange!E
 }
 ```
 
-The best known random access range is D's array:
+Ví dụ tốt nhất cho dải truy cập ngẫu nhiên là các dãy trong Dlang:
 
 ```d
 auto r = [4, 5, 6];
 r[1].writeln; // 5
 ```
 
-### Lazy range algorithms
+### Thuật toán gọi-theo-nhu-cầu
 
-The functions in [`std.range`](http://dlang.org/phobos/std_range.html) and
-[`std.algorithm`](http://dlang.org/phobos/std_algorithm.html) provide
-building blocks that make use of this interface. Ranges allow
-to compose complex algorithms behind an object that
-can be iterated with ease. Furthermore, ranges allow to create **lazy**
-objects that only perform a calculation when it's really needed
-in an iteration e.g. when the next range's element is accessed.
-Special range algorithms will be presented later in the
-[D's Gems](gems/range-algorithms) section.
+Thư viện [`std.range`](http://dlang.org/phobos/std_range.html) và
+[`std.algorithm`](http://dlang.org/phobos/std_algorithm.html) đưa ra
+cấu trúc vận dụng thuật toán gọi-theo-nhu-cầu. Thêm nữa, dải cho phép
+tạo ra các đối tượng **lười** với giá trị của chúng được tính toán
+chỉ khi nào thật sự cần đến trong phép lặp.
+Các thuật toán liên quan tới dải được mô tả nhiều hơn trong phần
+[Viên ngọc của D](gems/range-algorithms).
 
-### In-depth
+### Đọc thêm
 
 - [`std.algorithm`](http://dlang.org/phobos/std_algorithm.html)
 - [`std.range`](http://dlang.org/phobos/std_range.html)
@@ -147,19 +151,19 @@ import std.stdio : writeln;
 
 struct FibonacciRange
 {
-    // States of the Fibonacci generator
+    // Khởi đầu của dải Fibonacci
     int a = 1, b = 1;
 
-    // The fibonacci range never ends
+    // Dải Fibonacci không bao giờ kết thúc
     enum empty = false;
 
-    // Peak at the first element
+    // Trả về phần tử đầu tiên
     int front() const @property
     {
         return a;
     }
 
-    // Remove the first element
+    // Bỏ đi phần tử đầu tiên
     void popFront()
     {
         auto t = a;
@@ -176,22 +180,22 @@ void main()
     import std.algorithm.iteration :
         filter, sum;
 
-    // Select the first 10 fibonacci numbers
+    // Lấy 10 phần tử đầu tiên của dải Fibonacci
     auto fib10 = fib.take(10);
     writeln("Fib 10: ", fib10);
 
-    // Except the first five
+    // rồi bỏ đi phần tử thứ 5
     auto fib5 = fib10.drop(5);
     writeln("Fib 5: ", fib5);
 
-    // Select the even subset
+    // chọn các phần tử chẵn
     auto fibEven = fib5.filter!(x => x % 2);
     writeln("FibEven : ", fibEven);
 
-    // Sum of all elements
-    writeln("Sum of FibEven: ", fibEven.sum);
+    // Tính tổng các phần tử đã chọn
+    writeln("Tổng của FibEven: ", fibEven.sum);
 
-    // Usually this is summarized as:
+    // Phiên bản ngắn gọn:
     fib.take(10)
          .drop(5)
          .filter!(x => x % 2)
