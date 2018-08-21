@@ -1,69 +1,68 @@
-# Classes
+# Lớp
 
-D provides support for classes and interfaces like in Java or C++.
+D cũng có lớp và giao diện như trong Java hay C++.
 
-Any `class` type inherits from [`Object`](https://dlang.org/phobos/object.html) implicitly.
+Lớp bất kỳ thừa kế từ  lớp [`Object`](https://dlang.org/phobos/object.html),
+hay nói cách khác `Object` là mẹ của tất cả các lớp khác trong D.
 
-    class Foo { } // inherits from Object
-    class Bar : Foo { } // Bar is a Foo too
+    class Foo { } // thừa kế từ Object
+    class Bar : Foo { } // Bar cũng là Foo
 
-Classes in D are generally instantiated on the heap using `new`:
+Lớp được khởi tạo trên bộ nhớ `heap` nhờ `new`:
 
     auto bar = new Bar;
 
-Class objects are always reference types and unlike `struct` aren't
-copied by value.
+Đối tượng trong lớp luôn là kiểu tham chiếu, nên không có chuyện
+sao chép giá trị như kiểu ghép `struct`.
 
-    Bar bar = foo; // bar points to foo
+    Bar bar = foo; // bar là con trỏ tới foo
 
-The garbage collector will make sure the memory is freed
-when no references to an object exist anymore.
+Bộ dọn rác giải phóng bộ nhớ khi không còn tham chiếu nào trỏ tới
+đối tượng của lớp.
 
-### Inheritance
+### Thừa kế
 
-If a member function of a base class is overridden, the keyword
-`override` must be used to indicate that. This prevents unintentional
-overriding of functions.
+Chỉ thị `override` dùng khi cần định nghĩa lại hàm từ lớp mẹ.
+Việc ép buộc dùng từ khóa là để hạn chế các lỗi do vô ý.
 
     class Bar : Foo {
         override functionFromFoo() {}
     }
 
-In D, classes can only inherit from one class.
+Trong D một lớp chỉ thừa kế từ đúng một lớp khác.
 
-### Final and abstract member functions
+### Hàm trừu tượng và hàm hoàn chỉnh
 
-- A function can be marked `final` in a base class to disallow overriding
-it
-- A function can be declared as `abstract` to force derived classes to override
-it
-- A whole class can be declared as `abstract` to make sure
-that it isn't instantiated
-- `super(..)` can be used to explicitly call the base constructor
+- Khi một hàm được đánh dấu `final`, nó được xem là hoàn chỉnh
+  và các lớp thừa kế không thể định nghĩa lại hàm đó.
+- Hàm trừu tượng được đánh dấu bởi `abstract`, là các hàm
+  bắt buộc phải được định nghĩa lại trong các lớp thừa kế.
+- Một lớp trừu tượng được đánh dấu với `abstract`, là lớp
+  không được khởi tạo trên bộ nhớ.
+- `super(..)` dùng để gọi đến hàm khởi tạo của lớp mẹ.
 
-### Checking for identity
+### Phép so sánh
 
-For class objects, the `==` and `!=` operators compare the contents of the objects.
-Therefore, comparing against `null` is invalid, as `null` has no contents.
-The `is` compares for identity. To compare for nonidentity, use `e1 !is e2`.
+Phép so sánh `==` và `!=` dùng cho nội dung đối tượng của lớp.
+Vì `null` không có nội dung nào, việc dùng hai phép so sánh này với `null`
+là không hợp lệ; bạn cần dùng `is` như ví dụ sau:
 
 ```d
 MyClass c;
-if (c == null)  // error
+if (c == null)  // lỗi
     ...
-if (c is null)  // ok
+if (c is null)  // tốt
     ...
 ```
 
-For `struct` objects all bits are compared,
-for other operand types, identity is the same as equality.
+Với lớp ghép (`struct`) việc so sánh đối tượng diễn ra ở từng bit thông tin.
 
-### In-depth
+### Đọc thêm
 
-- [Classes in _Programming in D_](http://ddili.org/ders/d.en/class.html)
-- [Inheritance in _Programming in D_](http://ddili.org/ders/d.en/inheritance.html)
-- [Object class in _Programming in D_](http://ddili.org/ders/d.en/object.html)
-- [Classes in D spec](https://dlang.org/spec/class.html)
+- [Lớp trong sách _Programming in D_](http://ddili.org/ders/d.en/class.html)
+- [Thừa kế trong sách _Programming in D_](http://ddili.org/ders/d.en/inheritance.html)
+- [Đối tượng lớp trong sách _Programming in D_](http://ddili.org/ders/d.en/object.html)
+- [Đặc tả về lớp](https://dlang.org/spec/class.html)
 
 ## {SourceCode}
 
@@ -71,24 +70,25 @@ for other operand types, identity is the same as equality.
 import std.stdio : writeln;
 
 /*
-Fancy type which can be used for
-anything...
+Lớp này có thể dùng cho mọi việc...
 */
 class Any {
-    // protected is just seen by inheriting
-    // classes
+    // protected có thể thấy từ lớp con
     protected string type;
 
     this(string type) {
         this.type = type;
     }
 
-    // public is implicit by the way
+    // public là mặc định, nên không cần chỉ ra.
+    // Ngăn việc định nghĩa lại trong lớp con
     final string getType() {
         return type;
     }
 
     // This needs to be implemented!
+    // trừu tượng quá, nên hàm này buộc
+    // phải định nghĩa lại  trong lớp con
     abstract string convertToString();
 }
 
@@ -98,20 +98,19 @@ class Integer : Any {
         int number;
     }
 
-    // constructor
+    // khởi tạo
     this(int number) {
-        // call base class constructor
+        // gọi hàm khởi tạo ở lớp mẹ
         super("integer");
         this.number = number;
     }
 
-    // This is implicit. And another way
-    // to specify the protection level
+    // public là thuộc tính mặc định
     public:
 
     override string convertToString() {
         import std.conv : to;
-        // The swiss army knife of conversion.
+        // đổi tất cả qua chuỗi
         return to!string(number);
     }
 }
@@ -126,7 +125,7 @@ class Float : Any {
 
     override string convertToString() {
         import std.string : format;
-        // We want to control precision
+        // điều chỉnh sai số
         return format("%.1f", number);
     }
 }
