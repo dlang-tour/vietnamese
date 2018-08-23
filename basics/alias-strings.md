@@ -73,7 +73,7 @@ tới từng `code unit`, bạn có thể xem
 [`byCodeUnit`](http://dlang.org/phobos/std_utf.html#.byCodeUnit).
 
 Việc xử lý các kiểu Unicode khác nhau được mô tả trong
-[FIXME/Unicode gems chapter](/FIXME/gems/unicode).
+[Unicode gems chapter](gems/unicode).
 
 ### Chuỗi nhiều dòng
 
@@ -99,7 +99,7 @@ Còn nhiều cách khác để biểu diễn chuỗi [bạn có thể xem ở đ
 
 ### Đọc thêm
 
-- [FIXME/Unicode gem](/FIXME/gems/unicode)
+- [Unicode gem](gems/unicode)
 - [Ký tự trong sách _Programming in D_](http://ddili.org/ders/d.en/characters.html)
 - [Chuỗi trong sách _Programming in D_](http://ddili.org/ders/d.en/strings.html)
 - [std.utf](http://dlang.org/phobos/std_utf.html) - UTF en-/decoding algorithms
