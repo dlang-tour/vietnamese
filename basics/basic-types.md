@@ -21,13 +21,13 @@ mỗi biến của các kiểu sau vẫn chiếm cùng số bít trên bộ nh�
 |`double` | 64-bit
 |`real`   | >= 64-bit (thường là 64-bit, hoặc 80-bit trên Intel x86 32-bit)
 
-Kiểu bắt đầu bởi `u` để kiểu không nhận giá trị âm (không dấu).
+Kiểu bắt đầu bởi `u` để chỉ kiểu không nhận giá trị âm (không dấu).
 Kiểu `char` thực sự được nhúng trong UTF-8, trong khi `wchar`
 dùng ký tự UTF-16, còn `dchar` là UTF-32.
 
-Trình biên dịch D chỉ thực hiện chuyển đổi kiểu nếu đảm bảo được sự toàn vẹn
-giá trị con số. Tuy nhiên, việc chuyển đổi giữa các kiểu số thực chấm động
-thì được thực hiện thoải mái.
+Việc chuyển đổi kiểu chỉ được phép khi không xảy ra sự thay đổi giá trị.
+Trong khi đó việc chuyển đổi giữa các kiểu số thực chấm động có thể
+diễn ra không có ràng buộc nào.
 
 Việc chuyển đổi có thể  mang tính cưỡng chép bằng chỉ thị
 `cast(KIỂU) tên_biến`. Việc này cần phải làm hết sức cẩn thận.

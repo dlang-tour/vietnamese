@@ -31,8 +31,8 @@ hiệu quả.
 Biến khai báo với `const` cũng không thể thay đổi giá trị, nhưng điều này
 chỉ áp dụng trong giới hạn của ngữ cảnh hiện tại (_scope_). Ví dụ, một
 biến được khai báo giá trị ở một nơi, và được dùng trong một hàm
-với ràng buộc rằng biến không thể giá trị bên trong hàm đó.
-Điều này thường thấy khi thiết các giao diện ứng dụng (_API_), ở đó các
+với ràng buộc rằng biến không thể thay đổi giá trị bên trong hàm đó.
+Điều này thường thấy khi thiết kế các giao diện ứng dụng (_API_), ở đó các
 hàm nhận tham số nhưng không hề / không thể thay đổi giá trị của tham số đầu vào.
 
 Chỉ thị `const` có thể áp dụng với biến đã được khai báo là `immutable`

@@ -9,10 +9,10 @@ Giống trong `C`, bạn có thể dùng kiểu con trỏ `T*` trong `D`:
 
     int a;
     int* b = &a; // b chứa địa chỉ của a
-    auto c = &a; // c có kiểu int*, giá trị là địa chỉ củ a
+    auto c = &a; // c có kiểu int*, giá trị là địa chỉ của a
 
 Vùng bộ nhớ trên `heap` được cấp nhờ  chỉ thị `new`, kết quả của nó
-là con trỏ đến vùng được phát:
+là con trỏ đến vùng nhớ được phát:
 
     int* a = new int;
 
