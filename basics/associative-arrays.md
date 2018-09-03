@@ -1,41 +1,44 @@
-# Associative Arrays
+# Mảng liên hợp
 
-D has built-in *associative arrays* also known as hash maps.
-An associative array with a key type of `string` and a value type
-of `int` is declared as follows:
+*ND:* Ta dùng mảng liên hợp cho từ gốc *Associative Array*. Nếu không
+  có gì nhầm lẫn, ta chỉ gọi tắt là *mảng*.
+
+D hỗ trợ  *mảng liên hợp* hay còn gọi là ánh xạ băm (`hash map`).
+Ví dụ mảng với khóa kiểu chuỗi và giá trị kiểu số nguyên được khai báo
+như sau:
 
     int[string] arr;
 
-The value can be accessed by its key and thus be set:
+Lấy ví dụ về việc gán giá trị phần tử theo khóa của mảng:
 
     arr["key1"] = 10;
 
-To test whether a key is located in the associative array, the
-`in` expression can be used:
+Dùng chỉ thị `in` để biết một khóa có trong mảng hay không:
 
     if ("key1" in arr)
-        writeln("Yes");
+        writeln("Có");
 
-The `in` expression returns a pointer to the value if it
-can be found or a `null` pointer otherwise. Thus existence check
-and writes can be conveniently combined:
+Biểu thức `in` trả về con trỏ tới giá trị  của khóa, hoặc trả về `null`
+nếu không tìm thấy khóa đã chỉ ra. Ta có thể tìm phần tử theo khóa
+rồi gán giá trị mới cho nó như sau:
 
     if (auto val = "key1" in arr)
         *val = 20;
 
-Access to a key which doesn't exist yields a `RangeError`
-that immediately aborts the application. For a safe access
-with a default value, `get(key, defaultValue)` can be used.
+Nếu khóa chưa có trong mảng, việc truy cập phần tử theo khóa đó làm
+phát sinh lỗi `RangeError` và chương trình lập tức dừng lại.
+Để tránh trường hợp này, có thể chỉ ra giá trị mặc định nếu khóa chưa có:
 
-AA's have the `.length` property like arrays and provide
-a `.remove(val)` member to remove entries by their key.
-It is left as an exercise to the reader to explore
-the special `.byKey` and `.byValue` ranges.
+    get(key, defaultValue)
 
-### In-depth
+Mảng liên hợp cũng có kích thước cho bởi `.length`, có thể bỏ đi phần tử
+bằng phép `.remove(key)`. Bạn có thể tự tìm hiểu thêm về `.byKey` và `.byValue`
+là hai phép duyệt qua mảng liên hợp.
 
-- [Associative arrays in _Programming in D_](http://ddili.org/ders/d.en/aa.html)
-- [Associative arrays specification](https://dlang.org/spec/hash-map.html)
+### Đọc thêm
+
+- [Mảng liên hợp trong sách _Programming in D_](http://ddili.org/ders/d.en/aa.html)
+- [Đặc tả của mảng liên hợp](https://dlang.org/spec/hash-map.html)
 - [std.array.byPair](http://dlang.org/phobos/std_array.html#.byPair)
 
 ## {SourceCode}
@@ -51,8 +54,7 @@ void main()
 {
     string text = "Rock D with D";
 
-    // Iterate over all words and count
-    // each word once
+    // Quét các từ và đếm mỗi từ một lần.
     int[string] words;
     text.toLower()
         .splitter(" ")
@@ -62,22 +64,22 @@ void main()
         writefln("key: %s, value: %d",
                        key, value);
 
-    // `.keys` and .values` return arrays
+    // `.keys` và .values` trả về các mảng
     writeln("Words: ", words.keys);
 
-    // `.byKey`, `.byValue` and `.byKeyValue`
-    // return lazy, iteratable ranges
+    // Dải lười được trả về từ `.byKey`,
+    // q`.byValue` hay `.byKeyValue`
     writeln("# Words: ", words.byValue.sum);
 
-    // A new associative array can be created
-    // with `assocArray` by passing a
-    // range of key/value tuples;
+    // Mảng liên hợp mới có thể được tạo
+    // bởi `assocArray` bằng dải
+    // các cặp key/value.
     auto array = ['a', 'a', 'a', 'b', 'b',
                   'c', 'd', 'e', 'e'];
 
-    // `.group` groups consecutively equivalent
-    // elements into a single tuple of the
-    // element and the number of its repetitions
+    // `.group` cho ứng với mỗi phần tử số
+    // lần xuất hiện liên tiếp của nó.
+    // (Xem kết quả sẽ dễ hiểu hơn.)
     auto keyValue = array.group;
     writeln("Key/Value range: ", keyValue);
     writeln("Associative array: ",
