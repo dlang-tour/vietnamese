@@ -15,7 +15,7 @@ ordering:
 - ranges
 - associative-arrays
 - classes
-# - interfaces
+- interfaces
 # - templates
 # - delegates
 # - exceptions

@@ -1,17 +1,17 @@
-# Interfaces
+# Giao tiếp
 
-D allows defining `interface`s which are technically like
-`class` types, but whose member functions must be implemented
-by any class inheriting from the `interface`.
+D cho phép định nghĩa giao tiếp `interface`, về kỹ thuật thì giống
+như kiểu lớp `class`, nhưng các hàm của nó chỉ được khai báo như giao diện,
+còn phần định nghĩa thực sự của hàm phải được thực hiện trong
+các lớp thừa kế từ giao tiếp.
 
     interface Animal {
         void makeNoise();
     }
 
-The `makeNoise` member function has to be implemented
-by `Dog` because it inherits from the `Animal` interface.
-Essentially `makeNoise` behaves like an `abstract` member
-function in a base class.
+Trong giao tiếp `Animal`, hàm `makeNoise` chỉ được khai báo để đấy chứ
+không có định nghĩa của hàm; lớp `Dog` thừa kế từ `Animal` sẽ định nghĩa
+hàm như nó muốn.
 
     class Dog : Animal {
         override void makeNoise() {
@@ -20,32 +20,34 @@ function in a base class.
     }
 
     auto dog = new Dog;
-    Animal animal = dog; // implicit cast to interface
+    Animal animal = dog; // tự động chuyển kiểu
     animal.makeNoise();
 
-The number of `interface`s a `class` can implement isn't limited,
-but it can inherit from only *one* base class.
+Không có giới hạn cho số hàm giao tiếp một lớp định nghĩa,
+tuy nhiên mỗi lớp chỉ thừa kế từ chỉ một lớp cơ sở.
 
-### NVI (non virtual interface) pattern
+### NVI (non virtual interface)
 
-The [NVI pattern](https://en.wikipedia.org/wiki/Non-virtual_interface_pattern)
-allows _non virtual_ methods for a common interface.
-Thus, this pattern prevents the violation of a common execution pattern.
-D enables the NVI pattern by
-allowing `final` (i.e. non-overridable) functions in an `interface`.
-This enforces specific behaviours customized by overriding
-other abstract `interface` functions.
+Ngoài các hàm ảo trong giao tiếp mà bạn phải định nghĩa lại trong lớp thừa kế,
+D cũng cho phép chỉ ra các hàm không ảo (`non-virtual`) trong giao tiếp chung,
+đó là các hàm được định nghĩa trong giao tiếp và không thể định nghĩa lại
+trong các lớp thừa kế. Việc này hạn chế việc làm hỏng các hàm chung của
+các lớp thừa kế từ giao diện.
+
+Việc cho phép định nghĩa hàm không ảo này gọi là
+[NVI](https://en.wikipedia.org/wiki/Non-virtual_interface_pattern),
+và bạn dùng từ khóa `final` như ví dụ sau:
 
     interface Animal {
         void makeNoise();
-        final doubleNoise() // NVI pattern
+        final doubleNoise() // NVI
         {
             makeNoise();
             makeNoise();
         }
     }
 
-### In-depth
+### Đọc thêm
 
 - [Interfaces in _Programming in D_](http://ddili.org/ders/d.en/interface.html)
 - [Interfaces in D](https://dlang.org/spec/interface.html)
@@ -57,15 +59,13 @@ import std.stdio : writeln;
 
 interface Animal {
     /*
-    Virtual function
-    which needs to be overridden!
+    Hàm ảo, cần phải được định nghĩa.
     */
     void makeNoise();
 
     /*
-    NVI pattern. Uses makeNoise internally
-    to customize behaviour inheriting
-    classes.
+    Mẫu NVI.
+    Dùng makeNoise để biến hóa tùy theo lớp
 
     Params:
         n =  number of repetitions
