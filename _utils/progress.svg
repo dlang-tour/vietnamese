@@ -90,13 +90,13 @@
 <g fill="none" stroke="#000000" stroke-opacity="0.137255" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,8.5,7.5)"
 
 >
-<polyline fill="none" vector-effect="none" points="51,1 51,14 " />
+<polyline fill="none" vector-effect="none" points="52,1 52,14 " />
 </g>
 
 <g fill="none" stroke="#22648d" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,8.5,7.5)"
 
 >
-<polyline fill="none" vector-effect="none" points="50,1 50,14 " />
+<polyline fill="none" vector-effect="none" points="51,1 51,14 " />
 </g>
 
 <g fill="url(#gradient1)" stroke="#22648d" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,8.5,7.5)"
@@ -107,7 +107,7 @@
 <g fill="url(#gradient2)" stroke="#22648d" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,8.5,7.5)"
 
 >
-<path vector-effect="none" fill-rule="evenodd" d="M0,2 C0,0.895431 0.895431,0 2,0 L50,0 C51.1046,0 52,0.895431 52,2 L52,13 C52,14.1046 51.1046,15 50,15 L2,15 C0.895431,15 0,14.1046 0,13 L0,2"/>
+<path vector-effect="none" fill-rule="evenodd" d="M0,2 C0,0.895431 0.895431,0 2,0 L51,0 C52.1046,0 53,0.895431 53,2 L53,13 C53,14.1046 52.1046,15 51,15 L2,15 C0.895431,15 0,14.1046 0,13 L0,2"/>
 </g>
 
 <g fill="url(#gradient3)" stroke="#22648d" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,8.5,7.5)"
@@ -133,7 +133,7 @@
 <g fill="none" stroke="#ffffff" stroke-opacity="0.196078" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,8.5,7.5)"
 
 >
-<path vector-effect="none" fill-rule="evenodd" d="M1,2 C1,1.44772 1.44772,1 2,1 L48,1 C48.5523,1 49,1.44772 49,2 L49,13 C49,13.5523 48.5523,14 48,14 L2,14 C1.44772,14 1,13.5523 1,13 L1,2"/>
+<path vector-effect="none" fill-rule="evenodd" d="M1,2 C1,1.44772 1.44772,1 2,1 L49,1 C49.5523,1 50,1.44772 50,2 L50,13 C50,13.5523 49.5523,14 49,14 L2,14 C1.44772,14 1,13.5523 1,13 L1,2"/>
 </g>
 
 <g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="2" transform="matrix(1,0,0,1,8,7)"

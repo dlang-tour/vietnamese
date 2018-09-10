@@ -1,59 +1,55 @@
-# Templates
+# Mẫu
 
-**D** allows defining templated functions similar to C++ and Java
-which is a means to define **generic** functions or objects which work
-for any type that compiles with the statements within the function's body:
+**D** cho phép định nghĩa các hàm mẫu tương tự như trong C++ hay Java,
+đó là các hàm **tổng quát** hay đối tượng của bất kỳ kiểu nào tương thích
+với các biểu thức của hàm:
 
     auto add(T)(T lhs, T rhs) {
         return lhs + rhs;
     }
 
-The template parameter `T` is defined in a set of parentheses
-in front of the actual function parameters. `T` is a placeholder
-which is replaced by the compiler when actually *instantiating*
-the function using the `!` operator:
+Tham số `T` được chỉ ra trong cặp dấu ngoặc trước phần tham số hàm,
+và trình biên dịch sẽ thay thế nó bởi kiểu thực sự nhờ toán tử `!` như ví dụ sau:
 
     add!int(5, 10);
     add!float(5.0f, 10.0f);
-    add!Animal(dog, cat); // won't compile; Animal doesn't implement +
+    add!Animal(dog, cat); // Animal không có phép +
+                          // nên trình biên dịch báo lỗi ở đây
 
-### Implicit Template Parameters
+### Nội suy tham số của mẫu
 
-Function templates have two parameter sets - the first is for
-compile-time arguments and the second is for run-time arguments.
-(Non-templated functions can accept only run-time arguments).
-If one or more compile-time arguments are left unspecified when the function is called,
-the compiler tries to deduce them from the list of run-time arguments as the types of those arguments.
+Các hàm mẫu chấp nhận hai kiểu tham số, một kiểu dùng cho lúc biên dịch,
+và kiểu dùng dùng cho lúc chạy chương trình. (Với các hàm không phải là
+hàm mẫu, chúng chỉ có các tham số lúc chạy `run-time`.)
+Các tham số cho lúc biên dịch không được chỉ ra tường minh, trình biên dịch
+sẽ cố nội suy ra kiểu từ các tham số `run-time`
 
     int a = 5; int b = 10;
-    add(a, b); // T is to deduced to `int`
+    add(a, b); // Tương đương với add!int(a,b)
     float c = 5.0;
-    add(a, c); // T is deduced to `float`
+    add(a, c); // T bây giờ là `float`
 
-### Template properties
+### Các tính chất của mẫu
 
-A function can have any number of template parameters which
-are specified during instantiation using the `func!(T1, T2 ..)`
-syntax. Template parameters can be of any basic type
-including `string`s and floating point numbers.
+Một hàm có thể có nhiều tham số mẫu, ví dụ `func!(T1, T2 ..)`.
+Những tham số này thuộc về một trong các kiểu cơ bản, bao gồm kiểu chuỗi
+và số thực chấm động.
 
-Unlike generics in Java, templates in D are compile-time only, and yield
-highly optimized code tailored to the specific set of types
-used when actually calling the function
+Không như trong Java, mẫu của D chỉ sử dụng vào lúc biên dịch, và nó sẽ
+làm phát sinh các mã tối ưu cho các kiểu khác nhau lúc hàm thật sự được gọi.
 
-Of course, `struct`, `class` and `interface` types can be defined as template
-types too.
+Các kiểu `struct`, `class`, `interface` cũng có thể dùng với mẫu:
 
     struct S(T) {
         // ...
     }
 
-### In-depth
+### Đọc thêm
 
 - [Tutorial to D Templates](https://github.com/PhilippeSigaud/D-templates-tutorial)
 - [Templates in _Programming in D_](http://ddili.org/ders/d.en/templates.html)
 
-#### Advanced
+#### Chuyên sâu
 
 - [D Templates spec](https://dlang.org/spec/template.html)
 - [Templates Revisited](http://dlang.org/templates-revisited.html):  Walter Bright writes about how D improves upon C++ templates.
@@ -65,10 +61,10 @@ types too.
 import std.stdio : writeln;
 
 /**
-Template class that allows
-generic implementation of animals.
-Params:
-    noise = string to write
+Lớp mẫu với định nghĩa
+đại khái của động vật.
+Tham số:
+    noise = tiếng kêu của con vật
 */
 class Animal(string noise) {
     void makeNoise() {
@@ -83,12 +79,10 @@ class Cat: Animal!("Meeoauw") {
 }
 
 /**
-Template function which takes any
-type T that implements a function
-makeNoise.
-Params:
-    animal = object that can make noise
-    n = number of makeNoise calls
+Hàm mẫu kiểu T sẽ định nghĩa lại hàm makeNoise.
+Tham số:
+    animal = con vật phát tiếng kêu
+    n = số lần kêu
 */
 void multipleNoise(T)(T animal, int n) {
     for (int i = 0; i < n; ++i) {
