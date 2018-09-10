@@ -49,7 +49,7 @@ Các kiểu `struct`, `class`, `interface` cũng có thể dùng với mẫu:
 - [Tutorial to D Templates](https://github.com/PhilippeSigaud/D-templates-tutorial)
 - [Templates in _Programming in D_](http://ddili.org/ders/d.en/templates.html)
 
-#### Chuyên sâu
+#### Nâng cao
 
 - [D Templates spec](https://dlang.org/spec/template.html)
 - [Templates Revisited](http://dlang.org/templates-revisited.html):  Walter Bright writes about how D improves upon C++ templates.
