@@ -1,13 +1,13 @@
-# Exceptions
+# Lỗi ngoại lệ
 
-This guide is only about User-`Exceptions` - System-`Errors` are usually fatal
-and should __never__ be caught.
+Phần này chỉ bàn về ngoại lệ (`Exception`) ở mức độ người dùng.
+Các lỗi ngoại lệ có tính hệ thống thường là tai họa và không nên cố tránh né chúng.
 
-### Catching Exceptions
+### Bắt lỗi ngoại lệ
 
-A common case for exceptions is to validate potentially invalid user input.
-Once an exception is thrown, the stack will be unwound until the first matching exception
-handler is found.
+Trường hợp phổ biến là bắt lỗi ngoại lệ khi xử lý dữ liệu do người dùng nhập vào.
+Khi phát sinh lỗi ngoại lệ, ngăn xếp (`stack`) chạy chương trình được nhả
+ra cho tới khi bắt được lỗi ngoại lệ đầu tiên.
 
 ```d
 try
@@ -20,13 +20,15 @@ catch (FileException e)
 }
 ```
 
-It's possible to have multiple `catch` blocks and a `finally` block that is executed
-regardless of whether an error occurred. Exceptions are thrown with `throw`.
+Bạn chủ động sinh ra lỗi ngoại lệ nhờ `throw`.
+Có thể bắt nhiều lỗi ngoại lệ khác nhau,
+và cũng có `finally` để thi hành phần mã dẫu trước đó có lỗi hoặc không.
+
 
 ```d
 try
 {
-    throw new StringException("You shall not pass.");
+    throw new StringException("Lỗi rồi, không qua được nhé!");
 }
 catch (FileException e)
 {
@@ -42,12 +44,11 @@ finally
 }
 ```
 
-Remember that the [scope guard](gems/scope-guards) is usually a better solution to the `try-finally`
-pattern.
+Tuy nhiên, cần nhớ rằng việc dùng [khóa giới hạn](gems/scope-guards) thường tốt hơn là `try-finally`.
 
-### Custom exceptions
+### Đặt lỗi ngoại lệ mới
 
-One can easily inherit from `Exception` and create custom exceptions:
+Có thể đặt ra các kiểu lỗi ngoại lệ mới nhờ lớp thừa kế từ `Exception`:
 
 ```d
 class UserNotFoundException : Exception
@@ -56,65 +57,73 @@ class UserNotFoundException : Exception
         super(msg, file, line);
     }
 }
-throw new UserNotFoundException("D-Man is on vacation");
+throw new UserNotFoundException("D-Man đang đi du lịch.");
 ```
 
-### Enter a safe world with `nothrow`
+### Cấm hoàn toàn việc phát sinh lỗi ngoại lệ
 
-The D compiler can ensure that a function can't cause catastrophic side-effects.
-Such functions can be annotated with the `nothrow` keyword. The D compiler
-statically forbids throwing exceptions in `nothrow` functions.
+Trình biên dịch có thể đảm bảo hàm không gây ra các hiệu ứng phụ nguy hiểm nào.
+Các hàm đánh dấu bởi `nothrow` được trình biên dịch đánh dấu
+và ngăn nó phát sinh bất kỳ lỗi ngoại lệ nào.
 
 ```d
 bool lessThan(int a, int b) nothrow
 {
-    writeln("unsafe world"); // output can throw exceptions, thus this is forbidden
+    writeln("thế giới nguy hiểm");
+    // Chuỗi output có thể gây lỗi ngoại lệ, nhưng vì hàm này
+    // được đánh dấu với `nothrow`, trình biên dịch sẽ không
+    // cho phép bạn dùng writeln như ở trên. Nói cách khác,
+    // bạn không thể biên dịch đoạn mã nguồn này.
+
     return a < b;
 }
 ```
 
-Please note that the compiler is able to infer attributes for templated code
-automatically.
+Lưu ý thêm là trình biên dịch có thể nội suy tính chất cho các mã mẫu
+một cách tự động.
 
 ### std.exception
 
-It is important to avoid `assert` and the soon to be introduced
-[contract programming](gems/contract-programming)
-for user-input as `assert` and contracts
-are removed when compiled in release mode. For convenience
-[`std.exception`](https://dlang.org/phobos/std_exception.html) provides
+Điều quan trọng cần nhớ là cần tránh dùng `assert`
+và cả [lập trình hợp đồng](gems/contract-programming) khi xử lý dữ liệu đầu vào
+từ người dùng, bởi vì `assert` hay hợp đồng đều bị bỏ qua khi trình biên dịch
+không bật cờ dò lỗi (`debug`). Bạn có thể dùng thư viện
+[`std.exception`](https://dlang.org/phobos/std_exception.html)
+trong đó hàm
 [`enforce`](https://dlang.org/phobos/std_exception.html#enforce)
-that can be used like `assert`, but throws `Exception`s
-instead of an `AssertError`.
+có vai trò tương tự `assert`, nhưng nó phát sinh lỗi ngoại lệ (`Exception`)
+thay vì `AssertError`.
 
 ```d
 import std.exception : enforce;
 float magic = 1_000_000_000;
-enforce(magic + 42 - magic == 42, "Floating-point math is fun");
+enforce(magic + 42 - magic == 42, "Dấu chấm động... vui nhỉ :)");
 
 // throw custom exceptions
-enforce!StringException('a' != 'A', "Case-sensitive algorithm");
+// quăng lỗi ngoại lệ do lập trình viên định nghĩa
+enforce!StringException('a' != 'A', "Phân biệt hoa thường.");
 ```
 
-However there's more in `std.exception`. For example when the error might not be
-fatal, one can opt-in to
+Thư viện `std.exception` cũng có nhiều thứ khác. Ví dụ khi lỗi không đến
+mức tai họa, bạn có thể bỏ qua nhờ
 [collect](https://dlang.org/phobos/std_exception.html#collectException) it:
 
 ```d
 import std.exception : collectException;
 auto e = collectException(aDangerousOperation());
 if (e)
-    writeln("The dangerous operation failed with ", e);
+    writeln("Hàm phát sinh lỗi ", e);
 ```
 
-To test whether an exception is thrown in tests, use [`assertThrown`](https://dlang.org/phobos/std_exception.html#assertThrown).
+Khi viết mã kiểm tra mức độ đơn vị,
+bạn giả lập các lỗi quăng ra với [`assertThrown`](https://dlang.org/phobos/std_exception.html#assertThrown).
 
-### In-depth
+### Nâng cao
 
-- [Exception Safety in D](https://dlang.org/exception-safe.html)
+- [An toàn với ngoại lệ](https://dlang.org/exception-safe.html)
 - [std.exception](https://dlang.org/phobos/std_exception.html)
 - system-level [core.exception](https://dlang.org/phobos/core_exception.html)
-- [object.Exception](https://dlang.org/library/object/exception.html) - base class of all exceptions that are safe to catch and handle.
+- [object.Exception](https://dlang.org/library/object/exception.html) - lớp cơ bản cho mọi lỗi ngoại lệ
 
 ## {SourceCode}
 
@@ -135,7 +144,7 @@ void main()
         writeln("Line: ", e.line);
         writeln("Stack trace:\n", e.info);
 
-        // Default formatting could be used too
+        // In ra lỗi với định dạng mặc định
         // writeln(e);
     }
 }
