@@ -1,75 +1,71 @@
-# Delegates
+# Ủy nhiệm hàm
 
-### Functions as arguments
+### Hàm như tham số
 
-A function can also be a parameter to another function:
+Một hàm có thể làm tham số cho hàm khác:
 
     void doSomething(int function(int, int) doer) {
-        // call passed function
+        // gọi hàm cho bởi tham số
         doer(5,5);
     }
 
-    doSomething(&add); // use global function `add` here
-                       // add must have 2 int parameters
+    doSomething(&add); // dùng phép cộng `add`
 
-`doer` can then be called like any other normal function.
+Tham số `doer` có thể được gọi giống như bất kỳ hàm nào khác.
 
-### Local functions with context
+### Hàm địa phương với ngữ cảnh
 
-The above example uses the `function` type which is
-a pointer to a global function. As soon as a member
-function or a local function is referenced, `delegate`'s
-have to be used. It's a function pointer
-that additionally contains information about its
-context - or *enclosure*, thus also called **closure**
-in other languages. For example a `delegate`
-that points to a member function of a class also includes
-the pointer to the class object. A `delegate` created by
-a nested function includes a link to the enclosing context
-instead. However, the D compiler may automatically make a copy of
-the context on the heap if it is necessary for memory safety -
-then a delegate will link to this heap area.
+Ví dụ trên dùng kiểu `function` là kiểu con trỏ, trỏ đến hàm toàn cục.
+Khi một hàm thành phần (của một lớp), hoặc hàm địa phương được tham khảo,
+ủy nhiệm hàm (`delegate`) sẽ được dùng đến. Ủy nhiệm hàm cũng là con trỏ
+hàm, nhưng có thêm thông tin về ngữ cảnh được gọi (*enclosure*, hay còn
+gọi là **closure** trong nhiều ngôn ngữ khác).
+Ví dụ, ủy hiệm hàm thành phần của một lớp (class) chứa thêm con trỏ đến
+đối tượng của lớp. Tuy nhiên, ủy nhiệm hàm tạo bởi hàm lồng nhau chỉ chứa
+liên kết đến các ngữ cảnh bao bên ngoài, và trình biên dịch D có thể
+tự động sao chép ngữ cảnh trên vùng `heap` khi cần thiết,
+sau đó một ủy nhiệm hàm sẽ liên kết tới vùng `heap` đó.
 
     void foo() {
         void local() {
             writeln("local");
         }
-        auto f = &local; // f is of type delegate()
+        auto f = &local; // f là ủy nhiệm hàm
     }
 
-The same function `doSomething` taking a `delegate`
-would look like this:
+Quay lại ví dụ đầu tiên, hàm `doSomething` có thể nhận tham số là ủy nhiệm hàm
+như sau :
 
     void doSomething(int delegate(int,int) doer);
 
-`delegate` and `function` objects cannot be mixed. But the
-standard function
+Ủy nhiệm hàm (`delegate`) không thể lẫn lộn với hàm (`function`).
+Tuy nhiên, nhờ hàm tiêu chuẩn
 [`std.functional.toDelegate`](https://dlang.org/phobos/std_functional.html#.toDelegate)
-converts a `function` to a `delegate`.
+bạn có thể chuyển một hàm `function` thành một ủy nhiệm `delegate`.
 
-### Anonymous functions & Lambdas
+### Hàm không tên và Lambda
 
-As functions can be saved as variables and passed to other functions,
-it is laborious to give them their own name and to define them. Hence D allows
-nameless functions and one-line _lambdas_.
+Bởi hàm có thể dùng như biến để truyền tham số cho hàm khác, nên nhiều lúc
+không cần thiết đặt tên cho hàm đó (như kiểu định nghĩa hàm thông thường).
+D cho phép bạn định nghĩa các hàm không tên, và các hàm một dòng _lambda_:
 
     auto f = (int lhs, int rhs) {
         return lhs + rhs;
     };
-    auto f = (int lhs, int rhs) => lhs + rhs; // Lambda - internally converted to the above
+    auto f = (int lhs, int rhs) => lhs + rhs; // Lambda
 
-It is also possible to pass-in strings as template arguments to functional parts
-of D's standard library. For example they offer a convenient way
-to define a folding (aka reducer):
+Trong Do có thể dùng chuỗi như là mẫu tham số hàm truyền cho các hàm
+trong thư viện tiêu chuẩn. Ví dụ, phép gộp `reducer` (hay `folding`)
+có thể viết ngắn gọn như sau:
 
     [1, 2, 3].reduce!`a + b`; // 6
 
-String functions are only possible for _one or two_ arguments and then use `a`
-as first and `b` as second argument.
+Tuy nhiên, cách tương tự chỉ áp dụng cho hàm có một hoặc hai tham số,
+trong đó luôn luôn `a` chỉ tham số thứ nhất còn `b` chỉ tham số thứ hai.
 
-### In-depth
+### Nâng cao
 
-- [Delegate specification](https://dlang.org/spec/function.html#closures)
+- [Đặc tả của ủy nhiệm hàm](https://dlang.org/spec/function.html#closures)
 
 ## {SourceCode}
 
@@ -84,22 +80,21 @@ enum IntOps {
 }
 
 /**
-Provides a math calculuation
-Params:
-    op = selected math operation
-Returns: delegate which does a math operation
+Các phép tính toán học
+Tham số:
+    op = toán tử
+Trả về: Ủy nhiệm hàm ứng với toán tử
 */
 auto getMathOperation(IntOps op)
 {
-    // Define 4 lambda functions for
-    // 4 different mathematical operations
+    // Bốn lambda ứng với bốn phép toán
     auto add = (int lhs, int rhs) => lhs + rhs;
     auto sub = (int lhs, int rhs) => lhs - rhs;
     auto mul = (int lhs, int rhs) => lhs * rhs;
     auto div = (int lhs, int rhs) => lhs / rhs;
 
-    // we can ensure that the switch covers
-    // all cases
+    // Dùng switch để lựa chọn lambda
+    // tùy vào tham số đầu vào op
     final switch (op) {
         case IntOps.add:
             return add;
@@ -118,11 +113,10 @@ void main()
     int b = 5;
 
     auto func = getMathOperation(IntOps.add);
-    writeln("The type of func is ",
+    writeln("Kiểu của hàm ",
         typeof(func).stringof, "!");
 
-    // run the delegate func which does all the
-    // real work for us!
-    writeln("result: ", func(a, b));
+    // Dùng ủy nhiệm hàm để thực hiện phép toán
+    writeln("Kết quả: ", func(a, b));
 }
 ```
