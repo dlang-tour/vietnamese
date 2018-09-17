@@ -9,7 +9,7 @@ _VI_DIR="$_START_DIR/../"
 _EN_DIR="$_START_DIR/../../dlang-tour-english/"
 
 _TOTAL="$(find "$_EN_DIR" -type f -iname "*.md" | wc -l)"
-_CURRENT="$(find "$_VI_DIR" -type f -iname "index.yml" -exec cat {} \; | grep '^- '| wc -l)"
+_CURRENT="$(find "$_VI_DIR"/{basics,welcome} -type f -iname "index.yml" -exec cat {} \; | grep '^- '| wc -l)"
 _PERCENT="$(( $_CURRENT * 100 / $_TOTAL ))"
 
 echo ":: translated: $_CURRENT, total: $_TOTAL, percent: $_PERCENT"

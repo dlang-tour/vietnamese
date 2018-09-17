@@ -3,7 +3,7 @@ start: welcome/welcome-to-d
 repo: dlang-tour/vietnamese
 ordering:
 - welcome
-#- basics
+- basics
 #- gems
 #- multithreading
 #- vibed
