@@ -1,7 +1,7 @@
 # Kiểu số cơ bản
 
-D có các kiểu số cơ bản với kích cỡ bộ nhớ cần thiết là như nhau bất kể
-hệ điều hành đang chạy là gì, ngoại trừ kiểu số thực `real` với dấu chấm động.
+D có các kiểu số cơ bản với kích cỡ bộ nhớ cần thiết độc lập với
+hệ điều hành ứng dụng đang chạy, ngoại trừ kiểu số thực `real` với dấu chấm động.
 Cụ thể hơn, dù bạn đang chạy ứng dụng D trên máy 32 hay 64 bit, thì
 mỗi biến của các kiểu sau vẫn chiếm cùng số bít trên bộ nhớ.
 
@@ -41,7 +41,7 @@ thay đổi.
 
 _(... hay là thuộc tính của kiểu.)_
 
-Biến kiểu số cũng là đối tượng với các thuộc tính riêng, ví dụ
+Các kiểu số cũng là đối tượng với các thuộc tính riêng, ví dụ
 
     int.init
 

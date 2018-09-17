@@ -26,7 +26,7 @@ Kết quả trả về giống như là "lăng kính" nhìn vào ô nhớ.
 
 "Lăng kính" có thể trỏ vào bất kỳ chỗ nào, cụ thể là vào vùng nhớ đã cấp
 (dù nó là động hay tĩnh); tổng quát hơn, trong D, các đối tượng nào có
-thế áp dụng toán tử `opSlice` đều có thể xem qua "lăng kính", hay "lát cắt".
+toán tử `opSlice` đều có thể xem qua "lăng kính", hay "lát cắt".
 
 Lát cắt hay có dạng tường minh `TÊN_NÀO_ĐÓ[bắt đầu .. kết thúc]`:
 
@@ -34,11 +34,11 @@ Lát cắt hay có dạng tường minh `TÊN_NÀO_ĐÓ[bắt đầu .. kết th
     assert(newArr.length == 3);
     newArr[0] = 10; // thay đổi newArr[0] hay arr[1]
 
-Vì chỉ là "lăng kính", việc tạo lăng kính mới, hay xem qua "lăng kính"
-không làm thay đổi thực chất, hay nói cách khác không có thay đổi nào trên
-vùng nhớ đã cấp; cũng như vậy, việc thay đổi (nếu có) không chỉ diễn ra hời
-hợt trên "lăng kính", mà thay đổi vùng nhớ thật sự và tất cả các "lăng kính"
-cùng trỏ tới một vùng nhớ sẽ ngay lập tức thay sự thay đổi.
+Vì chỉ là "lăng kính", việc tạo lăng kính mới không làm thay đổi thực chất,
+hay nói cách khác không có thay đổi nào trên vùng nhớ đã cấp;
+trong khi đó, việc thay đổi (nếu có) không chỉ diễn ra hời
+hợt trên "lăng kính", mà thay đổi vùng nhớ thật sự và kết quả nhìn của
+các "lăng kính" cùng trỏ tới một vùng nhớ sẽ ngay lập tức thay đổi.
 
 Nếu không có "lăng kính" nào cùng xem một vùng nhớ, nghĩa là vùng nhớ đó
 bị bỏ rơi, không ai quan tâm, và sẽ được bộ dọn rác tóm lấy và giải phóng.

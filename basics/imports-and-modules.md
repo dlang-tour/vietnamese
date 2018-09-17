@@ -10,7 +10,7 @@ Một ví dụ về sự chắc chắn là việc nạp mô-đun với `import`.
 ## Nạp mô-đun
 
 Chương trình chào thế giới đơn giản nhất trong `D` cũng cần nạp vài mô-đun
-bằng `import`, nhờ đó các hàm và kiểu từ mô-đun có thể dùng được trong chương trình.
+bằng `import`, nhờ đó các hàm và kiểu cung cấp bởi mô-đun có thể dùng được trong chương trình.
 
 ### The turtles start falling down
 
@@ -44,6 +44,7 @@ Ví dụ, thay cho `cat.d` bạn có thể dùng `my/cat/package.d`, và nhờ �
 bạn có thể có mô-dun khác `my/dog/package.d` cùng bên trong thư mục `my/`.
 
 Việc dùng tên `package.d` là để quy ước nạp tất cả các mô-đun khác cùng thư mục.
+(ND: chỗ này khá tối nghĩa, cần trao đổi thêm.)
 
 ## {SourceCode}
 

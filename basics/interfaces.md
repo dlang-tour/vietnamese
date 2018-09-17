@@ -23,7 +23,7 @@ hàm như nó muốn.
     Animal animal = dog; // tự động chuyển kiểu
     animal.makeNoise();
 
-Không có giới hạn cho số hàm giao tiếp một lớp định nghĩa,
+Không có giới hạn cho số  hàm giao tiếp được định nghĩa lại trong một lớp,
 tuy nhiên mỗi lớp chỉ thừa kế từ chỉ một lớp cơ sở.
 
 ### NVI (non virtual interface)

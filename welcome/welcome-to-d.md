@@ -43,7 +43,7 @@ các ngôn ngữ khác nhau. D có điều đặc biệt như
 Mỗi mục kèm theo mã nguồn minh họa có thể sửa đổi được từ trình duyệt,
 và bạn có thể chạy thử bằng cách chọn *Run* hay nhấn phím `Ctrl-enter`.
 
-Để chuyển tới lui giữ các mục, hãy chọn "`<` trước" hoặc "sau `>`"
+Để chuyển tới lui giữa các mục, hãy chọn "`<` trước" hoặc "sau `>`"
 ở cuối trang, hoặc dùng các phím mũi tên trái, phải.
 Bạn có thể tới ngay mục cần xem nhờ menu phía trên.
 

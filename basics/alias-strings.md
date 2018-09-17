@@ -20,7 +20,7 @@ Ví dụ hàm [`std.algorithm.splitter`](https://dlang.org/phobos/std_algorithm_
 tách chuỗi ban đầu thành các phần, nhưng nó kết quả thực tế là nó tạo
 ra các lăng kính nhỏ hơn chứ không yêu cầu cấp phát thêm bất kỳ vùng nhớ nào.
 
-Lưu ý là kiểu chuỗi `string` chỉ thích hợp cho chuỗi `UTF-8`.
+Lưu ý là kiểu `string` chỉ thích hợp cho chuỗi `UTF-8`.
 Với các bảng mã phức tạp hơn, bạn cần `wstring` hoặc `dstring`:
 
     alias wstring = immutable(wchar)[]; // UTF-16

@@ -106,7 +106,7 @@ enforce!StringException('a' != 'A', "Phân biệt hoa thường.");
 
 Thư viện `std.exception` cũng có nhiều thứ khác. Ví dụ khi lỗi không đến
 mức tai họa, bạn có thể bỏ qua nhờ
-[collect](https://dlang.org/phobos/std_exception.html#collectException) it:
+[collect](https://dlang.org/phobos/std_exception.html#collectException):
 
 ```d
 import std.exception : collectException;

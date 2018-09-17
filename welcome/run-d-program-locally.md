@@ -26,7 +26,7 @@ cho phép bạn chạy ngay ứng dụng của bạn:
     rdmd hello.d
 
 Trên hệ thống UNIX, bạn dùng _(shebang)_ chỉ dấu `#!/usr/bin/env rdmd` ở
-dòng đầu tiên của chương trình để có một _kịch bản_ trong D.
+dòng đầu tiên của tập tin mã nguồn để có một _kịch bản_ trong D.
 
 Xem thêm tham số điều khiển của `rmd` [ở đây](https://dlang.org/rdmd.html)
 hoặc từ kết quả của lệnh `rdmd --help`.

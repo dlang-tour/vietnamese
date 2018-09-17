@@ -1,6 +1,6 @@
 # Hằng và bất biến
 
-_(tiêu đề nguyên thủy: Mutability)_
+_(ND: tiêu đề nguyên thủy: Mutability)_
 
 D là ngôn ngữ xác định kiểu tĩnh: kể từ lúc biến được khai báo, kiểu của nó
 không thể thay đổi sang kiểu khác. Điều này hỗ trợ trình biên dịch

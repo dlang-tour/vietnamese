@@ -43,7 +43,7 @@ Khó hiểu? Hãy xem thêm vài ví dụ trong mã nguồn đi kèm phần này
 ## Gọi theo nhu cầu
 
 Phần tử của dải được tính toán chỉ khi việc đó thật sự cần.
-Tính chất là gọi là `lazy` (lười), hay `call-by-need` (gọi theo nhu cầu),
+Tính chất này gọi là `lazy` (lười), hay `call-by-need` (gọi theo nhu cầu),
 gặp nhiều trong các ngôn ngữ lập trình hàm.
 
 ```d

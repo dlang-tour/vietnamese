@@ -1,6 +1,6 @@
 # Mạch logic
 
-_(hay *luồng điều khiển*, *Control Flow*)_
+_(ND: hay *luồng điều khiển*, *Control Flow*)_
 
 Mạch logic trong ứng dụng được thể hiện nhờ `if` `else`
 

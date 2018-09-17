@@ -31,7 +31,7 @@ Các hàm `@safe` cũng không chấp nhận phép tính số học trên con tr
         int* c = p + 5; // lỗi
     }
 
-Các hàm `@trusted` được xác nhận bằng tay rằng chúng cho phép cầu nối
+Các hàm `@trusted` được xác nhận bằng tay rằng chúng cho phép làm cầu nối
 giữa `SafeD` và các cấp thấp hơn.
 
 ### Đọc tiếp

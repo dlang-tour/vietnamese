@@ -54,7 +54,7 @@ D cho phép bạn định nghĩa các hàm không tên, và các hàm một dòn
     };
     auto f = (int lhs, int rhs) => lhs + rhs; // Lambda
 
-Trong Do có thể dùng chuỗi như là mẫu tham số hàm truyền cho các hàm
+Trong D có thể dùng chuỗi như là mẫu tham số hàm truyền cho các hàm
 trong thư viện tiêu chuẩn. Ví dụ, phép gộp `reducer` (hay `folding`)
 có thể viết ngắn gọn như sau:
 
