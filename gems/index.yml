@@ -1,18 +1,18 @@
-title: D's Gems
+title: Những viên ngọc của D
 ordering:
 - uniform-function-call-syntax-ufcs
-- scope-guards
-- range-algorithms
-- unittesting
-- string-mixins
-- compile-time-function-evaluation-ctfe
-- functional-programming
-- contract-programming
-- subtyping
-- attributes
-- opdispatch-opapply
-- documentation
-- traits
-- template-meta-programming
-- bit-manipulation
-- unicode
+# - scope-guards
+# - range-algorithms
+# - unittesting
+# - string-mixins
+# - compile-time-function-evaluation-ctfe
+# - functional-programming
+# - contract-programming
+# - subtyping
+# - attributes
+# - opdispatch-opapply
+# - documentation
+# - traits
+# - template-meta-programming
+# - bit-manipulation
+# - unicode

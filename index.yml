@@ -4,7 +4,7 @@ repo: dlang-tour/vietnamese
 ordering:
 - welcome
 - basics
-#- gems
+- gems
 #- multithreading
 #- vibed
 #- byexample
