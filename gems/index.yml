@@ -1,7 +1,7 @@
-title: Những viên ngọc của D
+title: Viên ngọc trong D
 ordering:
 - uniform-function-call-syntax-ufcs
-# - scope-guards
+- scope-guards
 # - range-algorithms
 # - unittesting
 # - string-mixins
