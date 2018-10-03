@@ -3,7 +3,7 @@ ordering:
 - uniform-function-call-syntax-ufcs
 - scope-guards
 - range-algorithms
-# - unittesting
+- unittesting
 # - string-mixins
 # - compile-time-function-evaluation-ctfe
 # - functional-programming

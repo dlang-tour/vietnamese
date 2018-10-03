@@ -1,60 +1,59 @@
-# Unittesting
+# Kiểm định mức đơn vị
 
-Tests are an excellent way to ensure stable, bug-free applications.
-They serve as an interactive documentation and allow to modify
-code without fear to break functionality. D provides a convenient
-and native syntax for `unittest` block as part of the D language.
-Anywhere in a D module `unittest` blocks can be used to test
-functionality of the source code.
+Các phép thử (kiểm định) là cách hay để đảm bảo chương trình ổn định, không lỗi.
+Các phép thử mức đơn vị có thể xem như tài liệu trực quan, và cho phép lập
+trình viên thay đổi mã nguồn mà không làm thay đổi tính năng của hàm
+hay chương trình.
 
-    // Block for my function
+Trong `D` có hỗ trợ sẵn từ khóa `unittest` để tạo khối các phép thử mức đơn vị;
+các khối này có thể để ở bất kỳ đâu trong một mô-đun D.
+
+    // Khối mã kiểm định mức đơn vị
     unittest
     {
         assert(myAbs(-1) == 1);
         assert(myAbs(1)  == 1);
     }
 
-This allows straightforward [Test-driven development](https://en.wikipedia.org/wiki/Test-driven_development)
-on demand.
+Bằng cách này hiển nhiên tư duy
+[phát triển với động cơ kiểm định (Test-Driven Development)](https://en.wikipedia.org/wiki/Test-driven_development)
+được áp dụng.
 
-### Run & execute `unittest` blocks
+### Thực hiện kiểm định
 
-`unittest` blocks can contain arbitrary code which is just
-compiled in and run when the command line flag `-unittest`
-is passed to the DMD compiler. DUB also features compiling
-and running unittest through the `dub test` command.
+Các khối `unittest` có thể gồm bất kỳ mã nguồn nào, và chúng được biên dịch
+và thi hành khi cờ `-unittest` được trình biên dịch `DMD` đón nhận.
+Khi dùng `dub`, các mã kiểm định được thi hành với `dub test`.
 
-### Verify examples with `assert`
+### Các mã chặn `assert`
 
-Typically `unittest`s contain `assert` expressions that test
-the functionality of a given function. `unittest` blocks
-are typically located near the definition of a function
-which might be at the top level of the source, or even
-within classes or structs.
+Thường các khối mã `unittest` gồm các biểu thức chặn `assert` cho các
+tính năng khác nhau của hàm. Khối mã kiểm định thường được viết gần với
+định nghĩa của hàm, và có thể nằm bên trong định nghĩa của lớp hay kiểu ghép.
 
-### Increasing code coverage
+### Mức phủ của mã kiểm định
 
-Unittest are a powerful weapon to ensure bullet-proof applications.
-A common measurement to check how much of a program
-is being covered by tests, is the _code coverage_.
-It is the ratio of executed versus existing lines of code.
-The DMD compiler allows to easily generate code coverage reports
-by adding `-cov`. For every module a `.lst` file, which contains
-detailed statistics, will be generated.
+Phép đo thông dụng để biết một ứng dụng được kiểm định tới mức nào,
+là dùng chỉ số _code coverage_ (độ phủ của mã kiểm định).
+Đó là tỉ lệ giữa số dòng mã được thi hành (lúc chạy kiểm định)
+so với tổng số dòng mã của hàm hay ứng dụng.
+Trình biên dịch DMD có thể phát sinh thông tin này khi
+bạn gửi đến nó cờ `-cov`; thông tin thông kê cho từng mô-đun được sinh
+ra trong tập tin `.lst` tương ứng.
 
-As the compiler is able to infer attributes for templated code
-automatically, it is a common pattern to add annotated unittests
-to ensure such attributes for the tested code:
+Vì trình biên dịch có thể nội suy các thuộc tính của mã mẫu, nên trong D
+bạn thường nên viết thêm các nhãn cho mã kiểm định để chắc chắn một số
+ràng buộc xảy ra với mã kiểm định.
 
     @safe @nogc nothrow pure unittest
     {
         assert(myAbs() == 1);
     }
 
-### In-depth
+### Nâng cao
 
-- [Unit Testing in _Programming in D_](http://ddili.org/ders/d.en/unit_testing.html)
-- [Unittesting in D](https://dlang.org/spec/unittest.html)
+- [Unit Testing trong sách _Programming in D_](http://ddili.org/ders/d.en/unit_testing.html)
+- [Unittest trong D](https://dlang.org/spec/unittest.html)
 
 ## {SourceCode}
 
@@ -70,7 +69,7 @@ struct Vector3 {
         return x*rhs.x + y*rhs.y + z*rhs.z;
     }
 
-    // That's okay!
+    // Qua được kiểm định này là tốt
     unittest {
         assert(Vector3(1,0,0).dot(
           Vector3(0,1,0)) == 0);
@@ -82,7 +81,7 @@ struct Vector3 {
           x, y, z);
     }
 
-    // .. and that too!
+    // .. cái này cũng vậy
     unittest {
         assert(Vector3(1,0,0).toString() ==
           "x:1.0 y:0.0 z:0.0");
@@ -92,21 +91,22 @@ struct Vector3 {
 void main()
 {
     Vector3 vec = Vector3(0,1,0);
-    writeln(`This vector has been tested: `,
+    writeln(`Vector vừa được kiểm định: `,
       vec);
 }
 
 /*
-Or just somewhere else.
-Nothing is compiled in and just
-ignored in normal mode. Run dub test
-locally or compile with dmd -unittest
-to actually test your modules.
+Mã kiểm định ở một nơi khác. Những mà này
+không được biên dịch và được bỏ qua trong
+chế độ biên dịch bình thường. Bạn cần chạy
+`dub test` hoặc `dmd -unittest` để thực
+hiện việc kiểm định.
 */
 unittest {
     Vector3 vec;
-    // .init a special built-in property that
-    // returns the initial value of type.
+    // T.init trả về giá trị khởi tạo mặc định
+    // cho bất kỳ biến kiểu T nào được khai báo
+    // mà không gán cho giá trị ban đầu.
     assert(vec.x == double.init);
 }
 ```
