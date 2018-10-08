@@ -1,27 +1,24 @@
-# String Mixins
+# Mixin chuỗi
 
-The `mixin` expression takes an arbitrary string and
-compiles it and generates instructions accordingly. It
-is purely a **compile-time** mechanism and can only work
-on strings available during compilation - a comparison
-with the evil JavaScript `eval` would be highly unfair.
+Biểu thức `mixin` thoạt nhìn tựa như `eval` trong `JavaScript`:
+nó biến đổi chuỗi đầu vào thành mã nguồn. Nhưng trong `D`, `mixin`
+chỉ xảy ra lúc biên dịch, và nó chỉ nhận đầu vào là chuỗi:
 
     mixin("int b = 5");
-    assert(b == 5); // compiles just fine
+    assert(b == 5); // b bằng 5 đúng như mong đợi
 
-`mixin` also works with strings that are constructed
-dynamically as long as the available information doesn't
-depend on runtime values.
+`mixin` cũng có thể nhận đầu vào là các chuỗi được ghép hay phát sinh từ
+các biểu thức phức hợp, miễn là chuỗi kết quả không phụ thuộc vào các giá trị
+lúc chạy chương trình (`runtime`).
 
-`mixin` together with **CTFE** from the next section allows
-writing impressive libraries like [Pegged](https://github.com/PhilippeSigaud/Pegged)
-which generates
-a grammar parser from a grammar defined as a string
-in the source code.
+`mixin` cùng với `CTFE` trong phần kế tiếp giúp xây dựng các thư viện
+ấn tượng như [Pegged](https://github.com/PhilippeSigaud/Pegged) là thư
+viện giúp sinh ra bộ phân rã ngữ pháp (`grammar parser`)
+từ chuỗi định nghĩa cú pháp trong mã nguồn.
 
-### In-depth
+### Nâng cao
 
-- [Mixins in D](https://dlang.org/spec/template-mixin.html)
+- [Mixin trong D](https://dlang.org/spec/template-mixin.html)
 
 ## {SourceCode}
 
@@ -35,11 +32,10 @@ auto calculate(string op, T)(T lhs, T rhs)
 
 void main()
 {
-    // A whole new approach to Hello World!
+    // Cách khác để in ra chuỗi Hello World.
     mixin(`writeln("Hello World");`);
 
-    // pass the operation to perform as a
-    // template parameter.
+    // tham số mẫu là toán tử cần dùng
     writeln("5 + 12 = ", calculate!"+"(5,12));
     writeln("10 - 8 = ", calculate!"-"(10,8));
     writeln("8 * 8 = ", calculate!"*"(8,8));

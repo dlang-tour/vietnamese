@@ -4,7 +4,7 @@ ordering:
 - scope-guards
 - range-algorithms
 - unittesting
-# - string-mixins
+- string-mixins
 # - compile-time-function-evaluation-ctfe
 # - functional-programming
 # - contract-programming
