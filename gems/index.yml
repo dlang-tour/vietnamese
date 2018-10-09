@@ -5,7 +5,7 @@ ordering:
 - range-algorithms
 - unittesting
 - string-mixins
-# - compile-time-function-evaluation-ctfe
+- compile-time-function-evaluation-ctfe
 # - functional-programming
 # - contract-programming
 # - subtyping

@@ -1,51 +1,54 @@
-# Compile Time Function Evaluation (CTFE)
+# Triển khai hàm lúc biên dịch (CTFE)
 
-CTFE is a mechanism which allows the compiler to execute
-functions at **compile time**. There is no special set of the D
-language necessary to use this feature - whenever
-a function just depends on compile time known values
-the D compiler might decide to interpret
-it during compilation.
+Trình biên dịch D có khả năng triển khai các hàm trong quá trình biên dịch
+mã nguồn chương trình. Khả năng này gọi là
+`Compile Time Function Evaluation`, viết tắt `CTFE`.
 
-    // result will be calculated at compile
-    // time. Check the machine code, it won't
-    // contain a function call!
+Thông thường, khi bạn định nghĩa một hàm, hàm đó chỉ được gọi đến và
+triển khai (thi hành) lúc chương trình đang chạy. D mở rộng khả năng
+gọi hàm đến thời điểm **biên dịch** mã nguồn, trước khi chương trình
+hoạt động.
+
+Khả năng CTFE được kích hoạt không nhờ vào biểu thức đặc biệt nào, mà do
+trình biên dịch D quyết định dựa trên những giá trị đã được biết lúc
+biên dịch.
+
+    // giá trị căn bậc hai được tính lúc biên dịch
+    // mã nguồn. Mã máy ứng với mã nguồn sau
+    // không gồm lệnh gọi hàm nào.
     static val = sqrt(50);
 
-Keywords like `static`, `immutable` or `enum`
-instruct the compiler to use CTFE whenever possible.
-The great thing about this technique is that
-functions don't need to be rewritten to use
-it, and the same code can perfectly be shared:
+Các từ khóa `static`, `immutable` hay `enum` sẽ báo trình biên dịch
+thử kích hoạt CTFE nếu được. Kỹ thuật này có điểm hay là bạn không
+cần viết lại mã nguồn của hàm để dùng CTFE:
 
     int n = doSomeRuntimeStuff();
-    // same function as above but this
-    // time it is just called the classical
-    // run-time way.
+    // giống ví dụ đầu, nhưng lần này CTFE
+    // không gọi hàm nào được, do giá trị n
+    // chưa có lúc biên dịch
     auto val = sqrt(n);
 
-One prominent example in D is the [std.regex](https://dlang.org/phobos/std_regex.html)
-library. It provides at type `ctRegex` type which uses
-*string mixins* and CTFE to generate a highly optimized
-regular expression automaton that is generated during
-compilation. The same code base is re-used for
-the run-time version `regex` that allows to compile
-regular expressions only available at run-time.
+Ví dụ xuất sắc của việc dùng CTFE có trong thư viện
+[std.regex](https://dlang.org/phobos/std_regex.html).
+Kiểu `ctRegex` dùng `mixin` chuỗi và CTFE để tự động hóa việc
+phát sinh và tinh chỉnh các biểu thức chính quy (`regular expression`)
+lúc biên dịch mã nguồn của bạn. Phần mã nguồn cơ sở của `ctRegex`
+cũng được dùng lại cho `regex` là phiên bản xử lý các biểu thức
+chính quy ở lúc chạy chương trình (`run-time`).
 
     auto ctr = ctRegex!(`^.*/([^/]+)/?$`);
     auto tr = regex(`^.*/([^/]+)/?$`);
-    // ctr and tr can be used interchangely
-    // but ctr will be faster!
+    // ctr và tr có thể dùng như nhau, nhưng ctr
+    // sẽ nhanh hơn, do hiệu quả của CTFE.
 
-Not all language features are available
-during CTFE but the supported feature set is increased
-with every release of the compiler.
+Dù CTFE không thể kích hoạt với mọi thứ trong D,
+khả năng CTFE của trình biên dịch có xu hướng mở rộng trong các phiên bản về sau.
 
-### In-depth
+### Nâng cao
 
-- [Introduction to regular expressions in D](https://dlang.org/regular-expression.html)
+- [Biểu thức chính quy D](https://dlang.org/regular-expression.html)
 - [std.regex](https://dlang.org/phobos/std_regex.html)
-- [Conditional compilation](https://dlang.org/spec/version.html)
+- [Biên dịch theo điều kiện](https://dlang.org/spec/version.html)
 
 ## {SourceCode}
 
@@ -53,21 +56,18 @@ with every release of the compiler.
 import std.stdio : writeln;
 
 /**
-Calculate the square root of a number
-using Newton's approximation scheme.
+Tính căn bận hai của số nhờ xấp xỉ Newton.
 
-Params:
-    x = number to be squared
+Tham số:
+    x = con số cần tính căn
 
-Returns: square root of x
+Trả về: căn bậc hai của x
 */
 auto sqrt(T)(T x) {
-    // our epsilon when to stop the
-    // approximation because we think the change
-    // isn't worth another iteration.
+    // `epsilon` dùng để ngừng vòng lặp
     enum GoodEnough = 0.01;
     import std.math : abs;
-    // choose a good starting value.
+    // chọn giá trị bắt đầu
     T z = x*x, old = 0;
     int iter;
     while (abs(z - old) > GoodEnough) {
@@ -80,10 +80,10 @@ auto sqrt(T)(T x) {
 
 void main() {
     double n = 4.0;
-    writeln("The sqrt of runtime 4 = ",
+    writeln("Căn bậc hai của 4 = ",
         sqrt(n));
     static cn = sqrt(4.0);
-    writeln("The sqrt of compile time 4 = ",
+    writeln("Tính lúc biên dịch (CTFE) 4 = ",
         cn);
 }
 ```
