@@ -1,48 +1,46 @@
-# Functional programming
+# Lập trình hàm
 
-D puts an emphasis on *functional programming* and provides
-first-class support for development
-in a functional style.
+D rất chú ý tới lập trình hàm (`functional programming`),
+và xem các hàm như các biến thông thường (`first-class function`).
 
-In D a function can be declared as `pure` which implies
-that given the same input parameters, always the **same**
-output is generated. `pure` functions cannot access or change
-any mutable global state and are thus just allowed to call other
-functions which are `pure` themselves.
+Một hàm trong D khi được khai báo với chỉ thị `pure` sẽ loại trừ các hiệu
+ứng ngoài lề (`side effect`), nghĩa là đầu ra của hàm luôn luôn giống nhau
+khi giá trị đầu vào của hàm không đổi. Các hàm `pure` không thể sử dụng
+hay thay đổi các trạng thái toàn cục khả biến (`mutable`), và do đó
+bên trong định nghĩa của một hàm `pure` bạn chỉ có thể gọi tới các hàm
+`pure` khác.
+
 
     int add(int lhs, int rhs) pure {
-        impureFunction(); // ERROR: unable to call impureFunction here
+        impureFunction(); // LỖI: không thể gọi tới hàm không pure
         return lhs + rhs;
     }
 
-This variant of `add` is called **strongly pure function**
-because it returns a result dependent only on its input
-parameters without modifying them. D also allows the
-definition of **weakly pure functions** which might
-have mutable parameters:
+Phiên bản `add` này thực sự được gọi là phiên bản mạnh, bởi nó không
+thay đổi đầu vào. Phiên bản yếu hơn cho phép đầu vào là các tham chiếu
+(con trỏ):
 
     void add(ref int result, int lhs, int rhs) pure {
         result = lhs + rhs;
     }
 
-These functions are still considered pure and can't
-access or change any mutable global state. Just passed-in
-mutable parameters might be altered.
+Phiên bản sau này vẫn được xem là `pure` và nó cũng không thể sử dụng hay
+thay đổi bất kỳ trạng thái toàn cục khả biến nào; tuy nhiên, đầu vào của
+hàm có thể thay đổi do chúng là các con tham chiếu.
 
-Due to the constraints imposed by `pure`, pure functions
-are ideal for multi-threading environments to prevent
-data races *by design*. Additionally pure functions
-can be cached easily and allow a range of compiler
-optimizations.
+Do không phát sinh hiệu ứng bên lề mà các hàm `pure` rất lý tưởng khi
+dùng trong lập trình đa luồng (`multi-thread`), bởi nó giúp hạn chế tình trạng
+phá hủy dữ liệu (`data race`). Hơn nữa, kết quả đầu ra của hàm `pure` có
+thể lưu đệm và nhờ đó mở rộng khả năng tinh chỉnh quá trình biên dịch.
 
-The attribute `pure` is automatically inferred
-by the compiler for templated functions and `auto` functions,
-where applicable (this is also true for `@safe`, `nothrow`,
-and `@nogc`).
 
-### In-depth
+Thuộc tính `pure` được nội suy tự động bởi trình biên dịch cho các hàm mẫu
+và hàm được chỉ thị `auto`, nếu có thể. (Điều này cũng đúng với các chỉ thị
+khác như `@safe`, `nothrow`, `@nogc`.)
 
-- [Functional DLang Garden](https://garden.dlang.io/)
+### Nâng cao
+
+- [Khu vườn lập trình hàm](https://garden.dlang.io/)
 
 ## {SourceCode}
 
@@ -50,12 +48,10 @@ and `@nogc`).
 import std.bigint : BigInt;
 
 /**
- * Computes the power of a base
- * with an exponent.
+ * Tính lũy thừa
  *
- * Returns:
- *     Result of the power as an
- *     arbitrary-sized integer
+ * Trả về:
+ *     Số nguyên là lũy thừa theo cơ số base
  */
 BigInt bigPow(uint base, uint power) pure
 {
@@ -74,9 +70,8 @@ void main()
         reverseArgs;
     import std.stdio : writefln, writeln;
 
-    // memoize caches the result of the function
-    // call depending on the input parameters.
-    // pure functions are great for that!
+    // `memoize` dùng để lưu đệm kết quả của
+    // hàm `pure` trên bộ nhớ.
     alias fastBigPow = memoize!(bigPow);
 
     void test()
@@ -89,6 +84,6 @@ void main()
         ( benchmark!test(1)[0]
             .total!"usecs"/1000.0 )
             .reverseArgs!writefln
-                (" took: %.2f miliseconds");
+              (" thời gian: %.2f miliseconds");
 }
 ```

@@ -6,7 +6,7 @@ ordering:
 - unittesting
 - string-mixins
 - compile-time-function-evaluation-ctfe
-# - functional-programming
+- functional-programming
 # - contract-programming
 # - subtyping
 # - attributes
