@@ -1,26 +1,25 @@
-# Contract programming
+# Lập trình hợp đồng
 
-Contract programming in D includes a set of language constructs that allow increasing the code quality
-by implementing sanity checks that make sure that the code base behaves as intended.
-Contracts are compiled and executed when the software is built for testing or debugging.
-In release builds (enabled by the **-release** switch for DMD) they are completely omitted by the compiler,
-therefore they shouldn't be used to validate user input or as an alternative to using exceptions.
+Lập trình hợp đồng (`Contract programming`) là việc dùng một số cú pháp
+để tăng chất lượng mã nguồn, đảm bảo mã tuân theo các _hợp đồng_ đã ước định.
+Các hợp đồng được kiểm tra khi chương trình chạy ở chế độ kiểm thử hoặc dò lỗi,
+nhưng chúng bị bỏ qua hoàn toàn trong chế độ biên dịch ra sản phẩm cuối (**-release**).
+Vì vậy, các hợp đồng không nên được dùng để kiểm soát dữ liệu đầu vào
+hoặc kiểm soát lỗi ngoại lệ
 
-### `assert`
+### Chặn `assert`
 
-The simplest form of contract programming in D is
-the `assert(...)` expression that checks that a certain
-condition is met - and aborts the program with
-an `AssertionError` otherwise.
+Phiên bản đơn giản nhất của lập trình hợp đồng là dùng các chặn
+`assert(...)` để ước định một số điều kiện được thỏa mãn, hoặc thoát và
+dừng chương trình với mã `AssertionError` trong các trường hợp khác.
 
     assert(sqrt(4) == 2);
-    // optional custom assertion error message
-    assert(sqrt(16) == 4, "sqrt is broken!");
+    // có thể thêm thông báo lỗi vào cho dễ dò
+    assert(sqrt(16) == 4, "không tính đúng căn bậc hai");
 
-### Function contracts
+### Hợp đồng hàm
 
-`in` and `out` allow to formalize contracts for input
-parameters and return values of functions.
+`in` và `out` để kiểm soát đầu vào và đầu ra của hàm bất kỳ:
 
     long square_root(long x)
     in {
@@ -32,38 +31,38 @@ parameters and return values of functions.
         return cast(long)std.math.sqrt(cast(real)x);
     }
 
-The content in the `in` block could also be expressed
-within the function's body but the intent is much clearer
-this way. In the `out` block the function's return
-value can be captured with `out(result)` and
-verified accordingly.
+Khối mã `in` cũng có thể đặt bên trong thân hàm, nhưng ý nghĩa của nó
+sẽ rõ ràng khi đặt bên ngoài như trong ví dụ trên. Trong khi đó, khối
+mã `out` có thể sử dụng giá trị trả về của hàm bằng cách chỉ ra biến, ví dụ
+`out(result)`.
 
-### Invariant checking
+### Kiểm tra bất biến
 
-`invariant()` is a special member function of `struct`
-and `class` types that allows sanity checking an object's
-state during its whole lifetime:
+`invariant()` là hàm đặc biệt của các kiểu `struct` và `class`, được dùng
+để kiểm tra trạng thái đối tượng của kiểu trong suốt quá trình tồn tại
+của đối tượng
 
-* It's called after the constructor has run and before
-  the destructor is called.
-* It's called before entering a member function
-* `invariant()` is called after exiting a member
-  function.
+* Hàm `invariant()` được gọi sau khi đối tượng được khởi tạo,
+  và trước khi đối tượng bị hủy;
+* Hàm đó cũng được gọi trước các hàm thành phần của đối tượng được gọi,
+  và nó cũng được gọi sau khi hàm đó kết thúc.
 
-### Validating user input
+### Kiểm tra đầu vào từ người dùng
 
-As all contracts will be removed in the release build, user input should not
-be checked using contracts. Moreover `assert`s can still be used be in
-`nothrow` functions, because they throw fatal `Errors`.
-The runtime analog to `assert` is [`std.exception.enforce`](https://dlang.org/phobos/std_exception.html#.enforce),
-which will throw catchable `Exceptions`.
+Mọi hợp đồng được bỏ qua khi chương trình biên dịch với cờ `release`.
+Vì thế, đầu vào từ người dùng không được kiểm tra bằng các hợp đồng.
+Hơn nữa, chặn `assert` vẫn có thể được dùng trong các hàm `nothrow`
+bởi chúng sẽ quăng lỗi `Error`.
+Lúc chạy chương trình, thay vì dùng `assert` bạn có thể dùng
+[`std.exception.enforce`](https://dlang.org/phobos/std_exception.html#.enforce),
+để quăng ra các lỗi ngoại lệ (`Exception`) có thể bắt được.
 
-### In-depth
+### Nâng cao
 
-- [`assert` and `enforce` in _Programming in D_](http://ddili.org/ders/d.en/assert.html)
-- [Contract programming in _Programming in D_](http://ddili.org/ders/d.en/contracts.html)
-- [Contract Programming for Structs and Classes in _Programming in D_](http://ddili.org/ders/d.en/invariant.html)
-- [Contract programming in D spec](https://dlang.org/spec/contracts.html)
+- [`assert` và `enforce` trong sách _Programming in D_](http://ddili.org/ders/d.en/assert.html)
+- [Lập trình hợp đồng trong sách _Programming in D_](http://ddili.org/ders/d.en/contracts.html)
+- [Lập trình hợp đồng với kiểu ghép hay lớp, trong sách _Programming in D_](http://ddili.org/ders/d.en/invariant.html)
+- [Đặc tả của lập trình hợp đồng](https://dlang.org/spec/contracts.html)
 - [`std.exception`](https://dlang.org/phobos/std_exception.html)
 
 ## {SourceCode:incomplete}
@@ -72,8 +71,8 @@ which will throw catchable `Exceptions`.
 import std.stdio : writeln;
 
 /**
-Simplified Date type
-Use std.datetime instead
+Kiểu ngày tháng đơn giản.
+Trong thực tế, hãy dùng std.datetime.
 */
 struct Date {
     private {
@@ -95,13 +94,13 @@ struct Date {
     }
 
     /**
-    Serializes Date object from a
-    YYYY-MM-DD string.
+    Biến đổi chuỗi YYYY-MM-DD thành đối tượng
+    của kiểu Date
 
-    Params:
-        date = string to be serialized
+    Đầu vào :
+        date = chuỗi cần biến đổi
 
-    Returns: Date object.
+    Trả về: Đối tượng thuộc kiểu Date
     */
     void fromString(string date)
     in {
@@ -109,9 +108,10 @@ struct Date {
     }
     body {
         import std.format : formattedRead;
-        // formattedRead parses the format
-        // given and writes the result to the
-        // given variables
+        // formattedRead đọc các biến
+        // từ chuỗi đầu vào, theo định dạng và
+        // thứ tự được chỉ ra
+        // trong tham số thứ 2.
         formattedRead(date, "%d-%d-%d",
             &this.year,
             &this.month,
@@ -119,9 +119,10 @@ struct Date {
     }
 
     /**
-    Serializes Date object to YYYY-MM-DD
+    Chuyển đối tượng kiểu Date
+    thành chuỗi YYYY-MM-DD
 
-    Returns: String representation of the Date
+    Trả về: Chuỗi hiển thị ngày tháng
     */
     string toString() const
     out (result) {
@@ -130,7 +131,8 @@ struct Date {
         import std.string : isNumeric;
         import std.array : split;
 
-        // verify we return YYYY-MM-DD
+        // Chắc rằng kết quả trả về
+        // có đúng định dạng YYYY-MM-DD
         assert(result.count("-") == 2);
         auto parts = result.split("-");
         assert(parts.map!`a.length`
@@ -147,9 +149,10 @@ struct Date {
 void main() {
     auto date = Date(2016, 2, 7);
 
-    // This will make invariant fail.
-    // Don't validate user input with contracts,
-    // throw exceptions instead.
+    // Phép kiểm tra bất biến sẽ
+    // không thành công. Tuy nhiên,
+    // không nên dùng hợp đồng để lọc đầu vào,
+    // mà hãy dùng throw để quăng lỗi
     date.fromString("2016-13-7");
 
     date.writeln;

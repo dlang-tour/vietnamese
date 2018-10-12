@@ -7,7 +7,7 @@ ordering:
 - string-mixins
 - compile-time-function-evaluation-ctfe
 - functional-programming
-# - contract-programming
+- contract-programming
 # - subtyping
 # - attributes
 # - opdispatch-opapply
