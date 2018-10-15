@@ -9,7 +9,7 @@ ordering:
 - functional-programming
 - contract-programming
 - subtyping
-# - attributes
+- attributes
 # - opdispatch-opapply
 # - documentation
 # - traits
