@@ -10,7 +10,7 @@ ordering:
 - contract-programming
 - subtyping
 - attributes
-# - opdispatch-opapply
+- opdispatch-opapply
 # - documentation
 # - traits
 # - template-meta-programming
