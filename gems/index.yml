@@ -11,7 +11,7 @@ ordering:
 - subtyping
 - attributes
 - opdispatch-opapply
-# - documentation
+- documentation
 # - traits
 # - template-meta-programming
 # - bit-manipulation

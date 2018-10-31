@@ -1,58 +1,51 @@
-# Documentation
+# Tài liệu
 
-D tries to integrate important parts of modern
-software engineering directly into the language.
-Besides *contract programming* and *unittesting*
-D allows to natively generate [documentation](https://dlang.org/phobos/std_variant.html)
-out of your source code.
+D cố gắng tích hợp trực tiếp những phần quan trọng của công nghệ phần mềm
+vào trong ngôn ngữ. Bên cạnh lập trình hợp đồng và kiểm định đơn vị,
+bản thân D còn cho phép sinh ra tài liệu
+  [documentation](https://dlang.org/phobos/std_variant.html)
+được viết kèm với mã nguồn.
 
-Using a standard schema for documenting types
-and functions the command `dmd -D` conveniently
-generates HTML documentation based on the source
-files passed on command line.
-In fact the whole [Phobos library documentation](https://dlang.org/phobos)
-has been generated with *DDoc*.
+Tài liệu kèm với mã nguồn được viết tuân theo các mẫu *DDoc*,
+sau đó, việc thi hành `dmd -D` sẽ sinh ra các tập tin `HTML` mà nội dung
+là các phần tài liệu được viết trong tập tin mã nguồn.
+Ví dụ, toàn bộ tài liệu của [thư viện Phobos](https://dlang.org/phobos)
+được tạo ra bằng cách này.
 
-The following comment styles are considered
-by DDoc for inclusion into the source code
-documentation:
+Trong phần chú thích của mã nguồn, các kiểu sau đây được *DDoc* hiểu:
 
-* `/// Three slashes before type or function`
-* `/++ Multiline comment with two +  +/`
-* `/** Multiline comment with two *  */`
+* `/// Ba dấu chéo trước kiểu hay hàm`
+* `/++ Nhiều dòng với hai dấu cộng +  +/`
+* `/** Nhiều dòng với hai dấu sao *  */`
 
-Have a look at the source code example
-to see some standardized documentation
-sections.
+Hãy xem ví dụ trong phần mã nguồn ở trang này.
 
-### In-depth
+### Nâng cao
 
-- [DDoc design](https://dlang.org/spec/ddoc.html)
-- [Phobos standard library documentation](https://dlang.org/phobos)
+- [Thiết kế của DDoc](https://dlang.org/spec/ddoc.html)
+- [Tài liệu của thư viện Phobos](https://dlang.org/phobos)
 
 ## {SourceCode:incomplete}
 
 ```d
 /**
-  Calculates the square root of a number.
+  Tính căn bận hai của một số.
 
-  Here could be a longer paragraph that
-  elaborates on the great win for
-  society for having a function that is actually
-  able to calculate a square root of a given
-  number.
 
-  Example:
+  Mô tả rất dài dòng, nói thêm về lợi ích
+  to lớn cho xã hội khi có một hàm thật sự
+  tính toán được căn bậc hai của một số.
+
+  Ví dụ:
   -------------------
   double sq = sqrt(4);
   -------------------
-  Params:
-    number = the number the square root should
-             be calculated from.
+  Tham số:
+    number = Số cần tính căn bậc hai .
 
-  License: use freely for any purpose
-  Throws: throws nothing.
-  Returns: the square root of the input.
+  License: dùng thoải mái cho mọi mục đích
+  Throws: không quăng lỗi ngoại lệ nào.
+  Returns: căn bậc hai của số nhập vào.
 */
 T sqrt(T)(T number) {
 }
