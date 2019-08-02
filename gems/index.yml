@@ -12,7 +12,7 @@ ordering:
 - attributes
 - opdispatch-opapply
 - documentation
-# - traits
+- traits
 # - template-meta-programming
 # - bit-manipulation
 # - unicode
