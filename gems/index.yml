@@ -14,5 +14,5 @@ ordering:
 - documentation
 - traits
 # - template-meta-programming
-# - bit-manipulation
+- bit-manipulation
 # - unicode
