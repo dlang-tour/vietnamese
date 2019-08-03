@@ -1,7 +1,7 @@
-# Xử lý trên bit
+# Xử lý bit
 
 Phần này là ví dụ tuyệt vời cho khả năng sinh mã lúc biên dịch với mixin.
-Đó là việc xử lý trên các bit thông tin.
+Đó là việc xử lý các bit thông tin.
 
 ### Xử lý bit cách đơn giản
 
