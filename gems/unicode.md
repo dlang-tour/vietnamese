@@ -1,86 +1,83 @@
-# Unicode in D
+# Unicode trong D
 
-Unicode is a global standard for representing text in computers.
-D fully supports Unicode in both the language and the standard
-library.
+Unicode là tiêu chuẩn phổ quát để biểu diễn text trên máy tính.
+Unicode được hỗ trợ đầy đủ trong ngôn ngữ D và các thư viện chuẩn của D.
 
-## What and Why
+## Cái gì và Tại sao
 
-Computers, at the lowest level, have no notion of what text is,
-as they only deal with numbers. As a result, computer code needs
-a way to take text data and transform it to and from a binary
-representation. The method of transformation is called an
-*encoding scheme*, and Unicode is one such scheme.
+Xét ở tầng thấp nhất máy tính chỉ làm việc với các con số chứ không có
+khái niệm về text (văn bản). Kết quả là cần đến các mã máy tính để
+đọc và chuyển hóa thông tin từ text sang dạng biểu diễn nhị phân và
+ngược lại. Cách thức chuyển hóa này được gọi là *encoding scheme*
+và Unicode chỉ là một trong số cách.
 
-To see the numerical representations underlying the strings in
-the example, simply run the code.
+Để xem biểu diễn số hóa của các chuỗi trong phần ví dụ, bạn hãy chọn
+chạy các mã.
 
-Unicode is unique in that its design allows it to represent all
-the languages of the world using the same encoding scheme. Before
-Unicode, computers made by different companies or shipped in
-different areas had a hard time communicating, and in some cases
-an encoding scheme wasn't supported at all, making viewing the text
-on that computer impossible.
+Unicode độc đáo ở chỗ thiết kế của nó cho phép biểu diexn tất cả các
+ngôn ngữ (văn vản) trên thế giới theo cùng một cách. Trước Unicode,
+máy tính được sản xuất bởi các hãng khác nhau hay được thiết kế cho các
+vùng địa lý khác nhau khó mà giao tiếp thông suốt lẫn nhau, và một số
+máy tính còn không hỗ trợ *encoding scheme* dẫn đến việc không thể xem
+văn bản (text) trên máy.
 
-For more info on Unicode and the technical details, check the
-Wikipedia article on Unicode in the "In-Depth" section.
 
-## How
+Thông tin thêm về Unicode cùng với các chi tiết kỹ thuật có thể tìm
+thấy trên trang Wikipedia được dẫn link ở phần Nâng cao.
 
-Unicode has fixed most of those problems and is supported on every
-modern machine. D learns from the mistakes of older languages,
-as such **all** strings in D are Unicode strings, whereas strings
-in languages such as C and C++ are just arrays of bytes.
+## Thế nào
 
-In D, `string`, `wstring`, and `dstring` are UTF-8, UTF-16, and
-UTF-32 encoded strings respectively. Their character types are
-`char`, `wchar`, and `dchar`.
+Unicode khắc phục hầu hết các vấn đề hiển thị và giao tiếp, và được hỗ
+trợ trên các máy tính hiện đại. Học được bài học từ các ngôn ngữ cũ hơn,
+D dùng unicode cho mọi chuỗi (trong C hay C++, chuỗi chỉ là mảng các byte).
 
-According to the spec, it is an error to store non-Unicode
-data in the D string types; expect your program to fail in
-different ways if your string is encoded improperly.
+Trong D, có các kiểu chuỗi `string`, `wstring`, và `dstring` ứng với
+các bảng mã UTF-8, UTF-16, và UTF-32. Kiểu ký tự tương ứng với mỗi kiểu
+chuỗi đó là `char`, `wchar`, và `dchar`.
 
-In order to store other string encodings, or to obtain C/C++
-behavior, you can use `ubyte[]` or `char*`.
+Theo đặc tả của D, bạn không thể lưu các thông tin không đúng Unicode
+vào các chuỗi. Chương trình của bạn sẽ bị lỗi theo các cách khác nhau
+nếu chuỗi của bạn được mã hóa không đúng cách.
 
-## Strings in Range Algorithms
+Để hỗ trợ các kiểu mã hóa khác, hay để làm giống như C/C++, bạn cần dùng
+kiểu `ubyte[]` hoặc `char*`.
 
-*Reading the [gem on range algorithms](gems/range-algorithms) is
-suggested for this section.*
+## Chuỗi trong các thuật toán liên quan tới dải
 
-There are some important caveats to keep in mind with Unicode
-in D.
+*Bạn có thể cần đọc qua phần về [thuật toán dải](gems/range-algorithms)
+trước khi tiếp tục xem ở đây.*
 
-First, as a convenience feature, when iterating over a string
-using the range functions, Phobos will encode the elements of
-`string`s and `wstrings` into UTF-32 code-points as each item.
-This practice, known as **auto decoding**, means that
+Có vài điều quan trọng luôn phải nghĩ đến khi dùng Unicode trong D.
+
+Trước hết, như là tính năng tiện lợi, khi duyệt qua chuỗi dùng các
+thuật toán dải, Phobos mã hóa các ký tự của chuỗi `string` hay `wstring`
+thành code-point trong UTF-32. Cách này, được biết đến với tên
+**auto decoding**, có nghĩa là
 
 ```
 static assert(is(typeof(utf8.front) == dchar));
 ```
 
-This behavior has a lot of implications, the main one that
-confuses most people is that `std.traits.hasLength!(string)`
-equals `False`. Why? Because, in terms of the range API,
-`string`'s `length` returns **the number of elements in the string**,
-rather than the number of elements the *range function will iterate over*.
+Thiết kế này có nhiều hệ quả, và một trong số chúng gây bối rối cho nhiều
+người, là biểu thức `std.traits.hasLength!(string)` trả về `False`.
+Tại sao? Bởi theo tiêu chuẩn các thuật toán dải, hàm `length` dành cho
+chuỗi trả về số ký tự trong một chuỗi, chứ không phải số phần từ mà
+thuật toán dải sẽ duyệt qua.
 
-From the example, you can see why these two things might not always
-be equal. As such, range algorithms in Phobos act as if `string`s
-do not have length information.
+Trong phần ví dụ, bạn sẽ thấy tại sao hai đối tượng có thể không luôn
+bằng khớp nhau. Thuật toán dải trong Photos hoạt động theo cách mà các
+chuỗi lại không có thông tin về chiều dài qua hàm `length`.
 
-For more information on the technical details of auto decoding,
-and what it means for your program, check the links in the
-"In-Depth" section.
+Để xem chi tiết kỹ thuật về **auto decoding**, và ảnh hưởng của nó tới
+chương trình của bạn, hãy lần theo các liên kết trong phần Nâng cao.
 
-### In-Depth
+### Nâng cao
 
 - [Unicode on Wikipedia](https://en.wikipedia.org/wiki/Unicode)
-- [Basic Unicode Functions in Phobos](https://dlang.org/phobos/std_uni.html)
-- [Tools for Decoding and Encoding UTF in Phobos](https://dlang.org/phobos/std_utf.html)
-- [An in Depth Look at Auto Decoding](https://jackstouffer.com/blog/d_auto_decoding_and_you.html)
-- [An in Depth Essay on Benefits of Using UTF-8](http://utf8everywhere.org/)
+- [Các hàm Unicode cơ bản trong Phobos](https://dlang.org/phobos/std_uni.html)
+- [Công cụ để mã hóa và giải mã Unicode trong Phobos](https://dlang.org/phobos/std_utf.html)
+- [Một bài viết sâu hơn về Auto Decoding](https://jackstouffer.com/blog/d_auto_decoding_and_you.html)
+- [Lợi ích của việc dùng UTF-8 khắp nơi](http://utf8everywhere.org/)
 
 ## {SourceCode}
 
