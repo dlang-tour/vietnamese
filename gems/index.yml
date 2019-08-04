@@ -13,6 +13,6 @@ ordering:
 - opdispatch-opapply
 - documentation
 - traits
-# - template-meta-programming
+- template-meta-programming
 - bit-manipulation
 - unicode
