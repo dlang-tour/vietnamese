@@ -1,15 +1,14 @@
-# Attributes
+# Thuộc tính của hàm
 
-Functions can be attributed in various ways in D.
-Let's have a look at two built-in attributes
-as well as *user-defined attributes*. There
-are also the built-ins `@safe`, `@system` and `@trusted`
-which have been mentioned in the first chapter.
+Các hàm trong D có thể mang thêm thuộc tính theo vài cách khác nhau,
+kể cả các thuộc tính do người dùng định nghĩa. Ba thuộc tính mà D định
+nghĩa sẵn là `@safe`, `@system` và `@trusted` đã được đề cập trong
+các phần trước
 
 ### `@property`
 
-A function marked as `@property` looks like
-a normal member to the outside world:
+Hàm đánh dấu bởi `@property` trông như một (biến) thành phần bình thường
+khi được sử dụng ở ngoài kiểu lớp hay kiểu ghép:
 
     struct Foo {
         @property bar() { return 10; }
@@ -17,27 +16,27 @@ a normal member to the outside world:
     }
 
     Foo foo;
-    writeln(foo.bar); // actually calls foo.bar()
-    foo.bar = 10; // calls foo.bar(10);
+    writeln(foo.bar); // cú pháp chuẩn là foo.bar()
+    foo.bar = 10; // phép gọi hàm thực sự là foo.bar(10);
 
 ### `@nogc`
 
-When the D compiler encounters a function that is marked as `@nogc`
-it will make sure that **no** memory allocations are done
-within the context of that function. A `@nogc`
-function is just allowed to call other `@nogc`
-functions.
-
+Các hàm đánh dấu với `@nogc` để đảm bảo rằng không xảy ray bất kỳ phép
+cấp phát bộ nhớ nào xảy ra bên trong thân hàm. Một hàm `@nogc` vì thế
+chỉ có thể gọi tới các hàm `@nogc` khác.
 
     void foo() @nogc {
-      // ERROR:
+      // Lỗi ngay, vì `new` yêu cầu
+      // cấp phát vùng nhớ mới
         auto a = new A;
     }
 
-### User-defined attributes (UDAs)
+### Người dùng tự định nghĩa thuộc tính (UDA)
 
-Any function or type in D can be attributed with user-defined
-types:
+Trong D lập trình viên có thể tự định nghĩa các thuộc tính mới cho hàm.
+Các thuộc tính này tên chung tiếng Anh là `User-defined attribute` (UDA).
+
+Ví dụ, hàm `foo` sau đây:
 
     struct Bar { this(int x) {} }
 
@@ -49,21 +48,21 @@ types:
       }
     }
 
-Any type, built-in or user-defined, can be attributed
-to functions. The function `foo()` in this example
-will have the attributes `"Hello"` (type `string`)
-and `Bar` (type `Bar` with value `10`). To get
-the attributes of a function (or type) use
-the built-in compiler *traits*
-`__traits(getAttributes, Foo)` which returns
-a [`AliasSeq`](https://dlang.org/phobos/std_meta.html#AliasSeq).
+Ở ví dụ này, hàm `foo()` được đánh dấu bởi thuộc tính `"Hello"` (kiểu `string`)
+và thuộc tính `Bar` (kiểu `Bar` với giá trị `10`).
+
+Để lấy các thuộc tính của hàm, có thể dùng *traits`, ví dụ
+`__traits(getAttributes, Foo)`, kết quả trả về là dãy các alias
+[`AliasSeq`](https://dlang.org/phobos/std_meta.html#AliasSeq).
 
 UDAs allow to enhance generic code by giving user-defined
 types another dimension that helps compile time
 generators to adapt to that specific type.
 
-### In-depth
+Việc dùng `UDA` mang lại thêm khả năng tinh chỉnh trình biên dịch khi
+làm việc với các kiểu do người dùng định nghĩa.
 
-- [User Defined Attributes in _Programming in D_](http://ddili.org/ders/d.en/uda.html)
-- [Attributes in D](https://dlang.org/spec/attribute.html)
+### Nâng cao
 
+- [UDA trong sách _Programming in D_](http://ddili.org/ders/d.en/uda.html)
+- [Đặc tả thuộc tính hàm trong D](https://dlang.org/spec/attribute.html)

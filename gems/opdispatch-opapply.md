@@ -1,20 +1,17 @@
-# opDispatch & opApply
+# opDispatch và opApply
 
-D allows overriding operators like `+`, `-` or
-the call operator `()` for
-[classes and structs](https://dlang.org/spec/operatoroverloading.html).
-We will have a closer look at the two special
-operator overloads `opDispatch` and `opApply`.
+Trong [kiểu ghép hay lớp](https://dlang.org/spec/operatoroverloading.html),
+D cho phép bạn định nghĩa lại các toán tử
+`+`, `-`, phép gọi hàm `()`. Liên quan đến khả năng này, ta sẽ bàn kỹ hơn
+về hai hàm `opDispatch` và `opApply`.
 
 ### opDispatch
 
-`opDispatch` can be defined as a member function of either
-`struct` or `class` types. Any unknown member function call
-to that type is passed to `opDispatch`,
-passing the unknown member function's name as `string`
-template parameter. `opDispatch` is a *catch-all*
-member function and allows another level of generic
-programming - completely in **compile time**!
+Các kiểu ghép hay lớp có thể định nghĩa hàm thành phần `opDispatch`
+để thay cho bất kỳ hàm thành phần nào chưa được định nghĩa tường minh.
+`opDispatch` nhận tên hàm thành phần chưa biết như là _tham số mẫu_, ở dạng chuỗi.
+Ta còn nói `opDispatch` là hàm *catch-all*; nó cho phép một mức khác
+của việc lập trình tổng quát (`generic programming`) tại lúc biên dịch mã nguồn.
 
     struct C {
         void callA(int i, int j) { ... }
@@ -33,11 +30,9 @@ programming - completely in **compile time**!
 
 ### opApply
 
-An alternative way to implementing a `foreach` traversal
-instead of defining a user defined *range* is to implement
-an `opApply` member function. Iterating with `foreach`
-over such a type will call `opApply` with a special
-delegate as a parameter:
+Thay vì định nghĩa kiểu dải (*range*) riêng để dùng với phép lặp `foreach`,
+ta có thể định nghĩa toán tử `opApply` như là hành thành phần. Khi duyệt
+với `foreach`, hàm `opApply` sẽ được gọi với tham số là một ủy nhiệm hàm đặc biệt:
 
     class Tree {
         Tree lhs;
@@ -54,34 +49,31 @@ delegate as a parameter:
         ...
     }
 
-The compiler transform the `foreach` body to a special
-delegate that is passed to the object. Its one and only
-parameter will contain the current
-iteration's value. The magic `int` return value
-must be interpreted and if it is not `0`, the iteration
-must be stopped.
+Trình biên dịch chuyển hóa thân của `foreach` thành một ủy nhiệm hàm đặc biệt,
+trở thành đối tượng dùng như tham số của `opApply`. Tham số duy nhất của
+ủy nhiệm hàm chứa giá trị hiện tại của phép lặp. Kiểu trả về là `int`,
+và nếu nó không phải là `0`, phép lặp sẽ phải dừng lại.
 
 ### In-depth
 
-- [Operator overloading in _Programming in D_](http://ddili.org/ders/d.en/operator_overloading.html)
-- [`opApply` in _Programming in D_](http://ddili.org/ders/d.en/foreach_opapply.html)
-- [Operator overloading in D](https://dlang.org/spec/operatoroverloading.html)
+- [Định nghĩa lại toán tử trong sách _Programming in D_](http://ddili.org/ders/d.en/operator_overloading.html)
+- [`opApply` trong sách _Programming in D_](http://ddili.org/ders/d.en/foreach_opapply.html)
+- [Đặc tả về định nghĩa lại toán tử](https://dlang.org/spec/operatoroverloading.html)
 
 ## {SourceCode}
 
 ```d
 /*
-A Variant is something that might contain
-any other type:
+Variant có thể chứa bát kỳ kiểu nào khác.
 https://dlang.org/phobos/std_variant.html
 */
 
 import std.variant : Variant;
 
 /*
-Type that can be filled with opDispatch
-with any number of members. Like
-JavaScript's var.
+Nhờ `opDispatch` kiểu `var` sau đây
+có thể có tùy ý thành thầnh,
+giống `var` trong JavaScript.
 */
 struct var {
     private Variant[string] values;
@@ -107,8 +99,9 @@ void main() {
     writeln("test.bar = ", test.bar);
     test.foobar = 3.1415;
     writeln("test.foobar = ", test.foobar);
-    // ERROR because it doesn't exist
-    // already
+    // Dòng sau phát sinh lỗi, vì
+    // test.notthere chưa từng xuất hiện
+    // trước dòng này.
     // writeln("test.notthere = ",
     //   test.notthere);
 }

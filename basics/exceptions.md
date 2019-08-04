@@ -44,7 +44,7 @@ finally
 }
 ```
 
-Tuy nhiên, cần nhớ rằng việc dùng [khóa giới hạn](gems/scope-guards) thường tốt hơn là `try-finally`.
+Tuy nhiên, cần nhớ rằng việc dùng [chặn phạm vi](gems/scope-guards) thường tốt hơn là `try-finally`.
 
 ### Đặt lỗi ngoại lệ mới
 

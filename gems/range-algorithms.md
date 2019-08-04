@@ -1,70 +1,65 @@
-# Range algorithms
+# Thuật toán dải
 
-The standard modules [std.range](http://dlang.org/phobos/std_range.html)
-and [std.algorithm](http://dlang.org/phobos/std_algorithm.html)
-provide a multitude of great functions that can be
-composed to express complex operations in a still
-readable way - based on *ranges* as building blocks.
+Các mô-đun tiêu chuẩn [std.range](http://dlang.org/phobos/std_range.html)
+và [std.algorithm](http://dlang.org/phobos/std_algorithm.html)
+cung cấp nhiều hàm và phép hợp những hàm này cho phép diễn tả đơn giản
+những phép tính toán phức tạp, với các _đơn vị_ là các dải (*range*).
 
-The great thing with these algorithms is that you just
-have to define your own range and you will directly
-be able to profit from what already is in the standard
-library.
+Những thuật toán dải phát huy hiệu quả ngay cả với các (kiểu) dải do bạn
+định nghĩa.
 
 ### std.algorithm
 
-`filter` - Given a lambda as template parameter,
- generate a new range that filters elements:
+`filter` - Áp dụng phép lọc các phần tử của dải dựa vào
+  hàm không tên (*lamda*) ở phần tham số mẫu:
 
     filter!"a > 20"(range);
     filter!(a => a > 20)(range);
 
-`map` - Generate a new range using the predicate
- defined as template parameter:
+`map` - Phát sinh dải mới nhờ vào hàm cung cấp ở phần tham số mẫu:
 
     [1, 2, 3].map!(x => to!string(x));
 
-`each` - Poor man's `foreach` as a range crunching
-function:
+`each` - Một phiên bản khác của `foreach` áp dụng trên dải
 
     [1, 2, 3].each!(a => writeln(a));
 
 ### std.range
-`take` - Limit to *N* elements:
+
+`take` - Tạo dải với *N* phần tử đầu tiên từ dải khác
 
     theBigBigRange.take(10);
 
-`zip` - iterates over two ranges
-in parallel returning a tuple from both
-ranges during iteration:
+`zip` - duyệt qua hai dải cùng lúc và tạo ra dải các cặp, mỗi cặp
+  gồm phần từ thấy ở hai dải trong cùng phép duyệt
 
     assert(zip([1,2], ["hello","world"]).front
       == tuple(1, "hello"));
 
-`generate` - takes a function and creates a range
-which in turn calls it on each iteration, for example:
+`generate` - phép *sinh* lấy một hàm, sinh ra một dải từ hàm đó, rồi
+  dùng dải thu được làm đầu vào cho hàm trong bước tiếp theo:
 
     alias RandomRange = generate!(() => uniform(1, 1000));
 
-`cycle` - returns a range that repeats the given input range
-forever.
+`cycle` - dải vô tận có được bằng cách lặp đi lặp lại dải đầu vào
 
     auto c = cycle([1]);
-    // range will never be empty!
+    // không bao giờ rỗng
     assert(!c.empty);
 
-### The documentation is awaiting your visit!
+### Xem thêm
 
+Tài liệu về các thuật toán dải trong hai thư viện đã nêu.
 
-### In-depth
+### Nâng cao
 
-- [Ranges in _Programming in D_](http://ddili.org/ders/d.en/ranges.html)
-- [More Ranges in _Programming in D_](http://ddili.org/ders/d.en/ranges_more.html)
+- [Dải trong sách _Programming in D_](http://ddili.org/ders/d.en/ranges.html)
+- [Nói nhiều hơn về dải trong sách _Programming in D_](http://ddili.org/ders/d.en/ranges_more.html)
 
 ## {SourceCode}
 
 ```d
-// Hey come on, just get the whole army!
+// Lấy đủ món vũ khí ra thôi!
 import std.algorithm : canFind, map,
   filter, sort, uniq, joiner, chunkBy, splitter;
 import std.array : array, empty;
@@ -74,48 +69,44 @@ import std.string : format;
 
 void main()
 {
-    string text = q{This tour will give you an
-overview of this powerful and expressive systems
-programming language which compiles directly
-to efficient, *native* machine code.};
+    string text = q{Khúc dạo đầu về Dlang
+giúp bạn có cái nhìn sơ lược về sức mạnh
+và sự truyền cảm của ngôn ngữ D với khả năng
+biên dịch mã nguồn thành mã máy hiệu quả.};
 
     // splitting predicate
     alias pred = c => canFind(" ,.\n", c);
-    // as a good algorithm it just works
-    // lazily without allocating memory!
+    // thuật toán này tốt ở chỗ nó lười
+    // không yêu cầu cấp thêm bộ nhớ
     auto words = text.splitter!pred
       .filter!(a => !a.empty);
 
     auto wordCharCounts = words
       .map!"a.count";
 
-    // Output the character count
-    // per word in a nice way
-    // beginning with least chars!
+    // In ra số các ký tự của các từ,
+    // bắt đầu với từ có số ký tự ít nhất
     zip(wordCharCounts, words)
-      // convert to array for sorting
+      // đổi qua mảng để sắp xếp
       .array()
       .sort()
-      // we don't need duplication, right?
+      // bỏ qua các từ trùng lặp
       .uniq()
-      // put all in one row that have the
-      // same char count. chunkBy helps
-      // us here by generating ranges
-      // of range that are chunked by the length
+      // đặt tất cả trên một hàng dựa vào
+      // số ký tự trùng nhau. chunkBy giúp
+      // sinh ra dải của dải dựa theo chiều dài
       .chunkBy!(a => a[0])
-      // those elments will be joined
-      // on one line
+      // các thành phần được ghép lại một dòng
       .map!(chunk => format("%d -> %s",
           chunk[0],
-          // just the words
+          // chỉ các từ
           chunk[1]
             .map!(a => a[1])
             .joiner(", ")))
-      // joiner joins, but lazily!
-      // and now the lines with the line
-      // feed
+      // thực hiện ghép, theo kiểu lười biếng.
+      // Ghép các dòng với dấu xuống hàng
       .joiner("\n")
-      // pipe to stdout
+      // in ra kết quả
       .writeln();
 }
 ```

@@ -1,29 +1,28 @@
-# Subtyping
+# Định kiểu thế (subtyping)
 
-`struct` can't inherit from other `struct`s. But
-for those poor `struct`s D provides another great
-means to extend their functionality: **subtyping**.
+Kiểu ghép `struct` không thể thừa kế từ kiểu ghép khác.
+Nhưng với các kiểu ghép, D có một cách khác để mở rộng khả năng của nó
+bằng cách định kiểu (thay) thế (`subtyping`).
 
-A struct type can define one of its members as
-`alias this`:
+Bên trong kiểu ghép bạn có thể định nghĩa một trong các thành phần của
+nó bằng `alias this`:
 
     struct SafeInt {
         private int theInt;
         alias theInt this;
     }
 
-Any function or operation on `SafeInt` that can't
-be handled by the type itself will be forwarded
-to the `alias this`ed member. From the outside
-`SafeInt` then looks like a normal integer.
+Sau đó, bất kỳ hàm hay toán tử nào trên đối tượng kiểu `SafeInt`
+mà không được định nghĩa bởi kiểu ghép `SafeInt` thì sẽ được _chuyển tiếp_
+qua thành phần `alias this`, mà trong ví dụ trên, là chuyển qua đối tượng
+kiểu `theInt`. Theo đó, các truy cập từ bên ngoài tới đối tượng `SafeInt`
+vẫn như với số nguyên bình thường.
 
-This allows extending other types
-with new functionality but with zero overhead
-in terms of memory or runtime. The compiler
-makes sure to do the right thing when
-accessing the `alias this` member.
+Cách định kiểu thế  cho phép mở rộng kiểu ghép mà không phải hao tốn thêm
+tài nguyên bộ nhớ lúc chạy chương trình. Trình biên dịch sẽ đảm bảo tính
+đúng đắn khi truy cập thành phần `alias this`.
 
-`alias this` work with classes too.
+`alias this` cũng có thể dùng với lớp (`class`).
 
 ## {SourceCode}
 
@@ -33,8 +32,8 @@ import std.stdio : writeln;
 struct Point
 {
     private double[2] p;
-    // p is used by the compiler
-    // to lookup unknown symbols
+    // p dùng bởi trình biên dịch để
+    // chuyển tiếp các hàm nó chưa biết.
     alias p this;
 
     double dot(Point rhs)
@@ -46,11 +45,11 @@ struct Point
 void main()
 {
     Point p1, p2;
-    // We're basically accessing a double[2]
+    // Sử dụng double[2] như bình thường
     p1 = [2, 1], p2 = [1, 1];
     assert(p1[$ - 1] == 1);
 
-    // but with extended functionality
+    // và với tính năng mở rộng
     writeln("p1 dot p2 = ", p1.dot(p2));
 }
 ```

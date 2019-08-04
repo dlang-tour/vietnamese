@@ -1,72 +1,63 @@
-# Template meta programming
+# Lập trình mẫu meta
 
-If you ever got in touch with *template meta programming*
-in C++ you will be relieved what tools D offers to make
-your life easier. Template meta programming is a technique
-that enables decision-making depending on template type properties
-and thus allows to make generic types even more flexible
-based on the type they are going to be instantiated with.
+Nếu bạn từng làm quen với *template meta programming*
+(lập trình mẫu meta) trong C++ bạn sẽ thấy trong D mọi việc còn dễ dàng
+hơn nữa. Lập trình mẫu meta là kỹ thuật cho phép đưa ra các quyết định
+dựa vào kiểu của mẫu, nhờ đó làm cho các kiểu tổng quát uyển chuyển hơn.
 
-### `static if` & `is`
+### `static if` và `is`
 
-Like the normal `if`, `static if` conditionally
-compiles a code block based on a condition that can
-be evaluated at compile time:
+Giống như `if`, nhưng `static if` được kiểm tra lúc biên dịch chương trình:
 
     static if(is(T == int))
-        writeln("T is an int");
+        writeln("T kiểu int");
     static if (is(typeof(x) :  int))
-        writeln("Variable x implicitely converts to int");
+        writeln("Biến x được ép qua kiểu int");
 
-The [`is` expression](http://wiki.dlang.org/Is_expression) is
-a generic helper that evaluates conditions at compile time.
+[Biểu thức `is`](http://wiki.dlang.org/Is_expression) giúp xác định các
+điều kiện lúc biên dịch chương trình:
 
-    static if(is(T == int)) { // T is template parameter
+    static if(is(T == int)) { // T là tham số mẫu
         int x = 10;
     }
 
-Braces are omitted if the condition is `true` - no new scope is created.
-`{ {` and `} }` explicitly create a new block.
+Dấu ngoặc được bỏ qua nếu điều kiện là `true` - không có khỗi mã nào
+được tạo ra.  `{ {` và `} }` tạo ra các khối mã một cách tường minh.
 
-`static if` can be used anywhere in the code - in functions,
-at global scope or within type definitions.
+`static if` có thể được dùng khắp nơi trong chương trình, trong các hàm,
+ở phạm vi toàn cục hay trong định nghĩa của kiểu.
 
-### `mixin template`
+### Mẫu `mixin`
 
-Anywhere you see *boiler plate*, `mixin template`
-is your friend:
+Khi nào bạn thấy *boiler plate*, thì mẫu `mixin` có thể giúp:
 
     mixin template Foo(T) {
         T foo;
     }
     ...
-    mixin Foo!int; // int foo available from here on.
+    mixin Foo!int; // Foo kiểu int có hiệu lực từ đây.
 
-`mixin template` might contain any number of
-complex expressions that are inserted at the instantiation
-point. Say good-bye to the
-pre-processor if you're coming from C!
+Mẫu `mixin` có thể gồm các biểu thức phức tạp được chèn vào nơi mẫu
+được gọi đến. Bạn không cần phép tiền xử lý từ C nữa.
 
-### Template constraints
+### Ràng buộc mẫu
 
-A template might be defined with any number of
-constraints that enforce what properties
-a type must have:
+Một mẫu có thể được định nghĩa với số lượng tùy ý các ràng buộc cần có
+cho các thuộc tính của kiểu:
 
     void foo(T)(T value)
-      if (is(T : int)) { // foo!T only valid if T
-                         // converts to int
+      if (is(T : int)) { // foo!T chỉ áp dụng được
+                         // khi T ép qua kiểu int được
     }
 
-Constraints can be combined in boolean expression
-and might even contain function calls that can be evaluated
-at compile-time. For example `std.range.primitives.isRandomAccessRange`
-checks whether a type is a range that supports
-the `[]` operator.
+Ràng buộc có thể được viết bằng kết hợp biểu thức Boolean hay thậm chí
+các hàm có thể định giá lúc biên dịch. Ví dụ, hàm
+`std.range.primitives.isRandomAccessRange`
+kiểm tra xem một kiểu có phải là một dải hỗ trợ toán tử `[]` không.
 
-### In-depth
+### Nâng cao
 
-### Basics references
+### Tham khảo cơ bản
 
 - [Tutorial to D Templates](https://github.com/PhilippeSigaud/D-templates-tutorial)
 - [Conditional compilation](http://ddili.org/ders/d.en/cond_comp.html)
@@ -74,7 +65,7 @@ the `[]` operator.
 - [More templates  _Programming in D_](http://ddili.org/ders/d.en/templates_more.html)
 - [Mixins in  _Programming in D_](http://ddili.org/ders/d.en/mixin.html)
 
-### Advanced references
+### Tham khảo nâng cao
 
 - [Conditional compilation](https://dlang.org/spec/version.html)
 - [Traits](https://dlang.org/spec/traits.html)

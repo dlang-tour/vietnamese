@@ -1,24 +1,24 @@
-# Bit manipulation
+# Xử lý bit
 
-An excellent example of D's ability to generate code on compile-time with mixins,
-is bit manipulation.
+Phần này là ví dụ tuyệt vời cho khả năng sinh mã lúc biên dịch với mixin.
+Đó là việc xử lý các bit thông tin.
 
-### Simple bit manipulation
+### Xử lý bit cách đơn giản
 
-D offers the following operators for bit manipulation:
+D có các hàm cơ bản để xử lý bit:
 
-- `&` bitwise and
-- `|` bitwise or
-- `~` bitwise negative
-- `<<`  bitwise signed   left-shift
-- `>>`  bitwise signed   right-shift (preserves the sign of the high-order bit)
-- `>>>` bitwise unsigned right-shift
+- `&` phép `và` (and)
+- `|` phép `hoặc` (or)
+- `~` phép phủ định (negative)
+- `<<`  phép dịch trái có dấu
+- `>>`  phép dịch phải có dấu (giữ nguyên dấu của bit cao)
+- `>>>` phép dịch phải không dấu
 
-### A practical example
+###  Ví dụ thực tế
 
-A common example for bit manipulation is to read the value of a bit.
-D provides `core.bitop.bt` for most common tasks, however to get used to bit
-manipulation, let's start with a verbose implementation of testing a bit:
+Ví dụ phổ biến là đọc giá trị của một bit. Dù D có thư viện `core.bitop.bt`
+cho hầu hết các nhu cầu, nhưng ta hãy tự bắt đầu theo cách riêng để làm
+quên với việc xử lý theo bit
 
 ```d
 enum posA = 1;
@@ -29,9 +29,9 @@ bool getFieldA()
 }
 ```
 
-A generalization is to test for blocks that are longer than 1. Hence
-a special read mask with the length of the block is needed
-and the data block is shifted accordingly before applying the mask:
+Tổng quát hơn, ta có thể kiểm tra một khối gồm nhiều hơn một bit.
+Ta sẽ cần biết chiều dài của khối, và đầu vào sẽ dịch chuyển tương ứng
+trước khi gài mặt nạ bit:
 
 ```d
 enum posA = 1;
@@ -43,8 +43,8 @@ uint getFieldA()
 }
 ```
 
-Setting such a block can equivalently be defined by negating the mask and thus
-only allowing writes within the specified block:
+Cài giá trị cho một khối có thể hiểu là dùng mặt nạ phủ định và chỉ cho phép
+thay đổi giá trị trong khối chỉ định:
 
 ```d
 void setFieldA(bool b);
@@ -53,27 +53,28 @@ void setFieldA(bool b);
 }
 ```
 
-## `std.bitmanip` to the rescue
+## `std.bitmanip` có hết mọi thứ
 
-It's a lot of fun to write ones' custom bit manipulation code and
-D provides the full toolbox to do so. However in most cases one doesn't want to
-copy&paste such bit manipulation code as this is very error-prone and hard to maintain.
-Hence in D `std.bitmanip` helps you to write maintainable, easy-to-read bit manipulations
-with `std.bitmanip` and the power of mixins - without sacrificing performance.
+Thư viện của D cung cấp mọi thứ để bạn xử lý các bit một cách hứng thú.
+Nhưng trong hầu hết trường hợp, bạn không muốn chép và dán những phép
+xử lý như trong ví dụ ở trên, vì cách đó dễ dẫn tới sai sót.
+Hãy sử dụng thư viện `std.bitmapip` để viết các phép xử lý bit theo cách
+đơn giản, dễ bảo trì, mà còn có thể dùng với mixin và không giảm đi hiệu năng
+chương trình.
 
-Have a look at the exercise section. A `BitVector` is defined, but it still uses
-just X bits and is nearly indistinguishable from a regular struct.
+Hãy xem ví dụ ở phần sau. Một `BitVector` được định nghĩa, nhưng nó chỉ sử
+dụng một số X bit, và hầu như không thể phân biệt với các cấu trúc thường.
 
-`std.bitmanip` and `core.bitop` contain more helpers that are greatly helpful
-for applications that require low-memory consumption.
+Thư viện `std.bitmanip` và `core.bitop` gồm nhiều hàm tiện ích cho các
+ứng dụng được viết với chủ đích giảm tối thiểu việc dùng bộ nhớ.
 
-### Padding and alignment
+### Padding và alignment
 
-As the compiler will add padding for variables with a size lower than the current
-OS memory layout (`size_t.sizeof`) e.g. `bool`, `byte`, `char`, it is recommended
-to start with fields of high alignments.
+Vì trình biên dịch thêm vào các biến một số bit để khớp với kiến trúc bộ
+nhớ trên hệ thống (`size_t.sizeof`), ví dụ các biến kiểu `bool`, `byte`, `char`,
+bạn được khuyên bắt đầu với các trường ở ngăn xếp cao (fields of high alignments.)
 
-## In-depth
+## Nâng cao
 
 - [std.bitmanip](http://dlang.org/phobos/std_bitmanip.html) - Bit-level manipulation facilities
 - [_Bit Packing like a Madman_](http://dconf.org/2016/talks/sechet.html)

@@ -1,30 +1,31 @@
 # Traits
 
-One of D's powers is its compile-time function evaluation (CTFE) system.
-Combined with introspection, generic programs can be written and
-heavy optimizations can be achieved.
+Một trong những sức mạnh của D là CTFE (compile-time function evaluation),
+hay khả năng tính toán các biểu thức lúc biên dịch chương trình.
+Cùng với introspection (nội soi), CTFE viết các chương trình ở dạng tổng quát
+và đạt được mức độ tối ưu cao .
 
-## Explicit contracts
+## Hợp đồng tường minh
 
-Traits allow to specify explicitly what input is accepted.
-For example `splitIntoWords` can operate on any arbitrary string type:
+Trait cho phép chỉ rõ những đầu vào được chấp nhận.
+Ví dụ, hàm `splitIntoWords` sau có thể chấp nhận bất kỳ kiểu chuỗi nào:
 
 ```d
 S[] splitIntoWord(S)(S input)
 if (isSomeString!S)
 ```
 
-This applies to template parameters as well and `myWrapper` can ensure that the
-passed-in symbol is a callable function:
+Điều này cũng đúng với tham số mẫu, như ví dụ `myWrapper` sau đây có thể
+đảm bảo đầu vào là một hàm (có thể gọi được, `isCallable`)
 
 ```d
 void myWrapper(alias f)
 if (isCallable!f)
 ```
 
-As a simple example, [`commonPrefix`](https://dlang.org/phobos/std_algorithm_searching.html#.commonPrefix)
-from `std.algorithm.searching`, which returns the common prefix of two ranges,
-will be analyzed:
+Ví dụ, hàm [`commonPrefix`](https://dlang.org/phobos/std_algorithm_searching.html#.commonPrefix)
+từ thư viện `std.algorithm.searching`, là hàm dùng để trả về phần đầu chung giữa hai dải,
+bao gồm phép phân tích đầu vào như sau
 
 ```d
 auto commonPrefix(alias pred = "a == b", R1, R2)(R1 r1, R2 r2)
@@ -34,24 +35,25 @@ if (isForwardRange!R1 &&
     !isNarrowString!R1)
 ```
 
-This means that the function is only callable and thus compiles if:
+Trình biên dịch xác định việc gọi hàm này được không lúc biên dịch chương
+trình, và chỉ tiếp tục nếu các điều kiện sau thỏa mãn
 
-- `r1` is save-able (guaranteed by `isForwardRange`)
-- `r2` is iterable (guaranteed by `isInputRange`)
-- `pred` is callable with element types of `r1` and `r2`
-- `r1` isn't a narrow string (`char[]`, `string`, `wchar` or `wstring`) - for simplicity, otherwise decoding might be needed
+- `r1` có thể lưu được (do `isForwardRange`)
+- `r2` là một dải (do `isInputRange`)
+- `pred` gọi được với các kiểu phần tử của `r1` và `r2`
+- `r1` không phải là chuỗi hẹp (`char[]`, `string`, `wchar` hay `wstring`) - cái này là để cho đơn giản, nếu không sẽ phải cần thêm các phép giải mã.
 
-### Specialization
+### Đặc biệt hóa
 
-Many APIs aim to be general-purpose, however they don't want to pay with extra
-runtime for this generalization.
-With the power of introspection and CTFE, it is possible to specialize a method
-on compile-time to achieve the best performance given the input types.
+Nhiều API hướng tới nhu cầu chung chung, nhưng chúng cũng không muốn phải
+trả giá phát sinh lúc chạy chương trình cho sự tổng quát hóa đó.
+Nhờ khả năng của nội soi (introspection) và CTFE, ta có thể đặc biệt hóa
+lúc biên dịch để đạt hiệu quả cao nhất ứng với một số kiểu đầu vào.
 
-A common problem is that in contrast to arrays you might not know the exact length
-of a stream or list before walking through it.
-Hence a simple implementation of the `std.range` method `walkLength`
-which generalizes for any iterable type would be:
+Một bài toán phổ biến là cần biết chính xác độ dài của danh sách hay stream
+trước khi duyệt qua (khác với khi xử lý mảng). Như ví dụ sau đây là một cách
+xét tới trường hợp đặc biệt để tránh dùng hàm tổng quát `walkLength`
+từ thư viện `std.range`:
 
 ```d
 static if (hasMember!(r, "length"))
@@ -62,24 +64,25 @@ else
 
 #### `commonPrefix`
 
-The use of compile-time introspection is ubiquitous in Phobos. For example
-`commonPrefix` differentiates between `RandomAccessRange`s
-and linear iterable ranges because in `RandomAccessRange` it's possible to jump
-between positions and thus speed-up the algorithm.
+Phép nội soi lúc biên dịch được dùng khắp nơi trong Phobos.
+Ví dụ, trong định nghĩa của `commonPrefix`, có sự phân biệt giữa các dải
+truy cập ngẫu nhiên (`RandomAccessRange`) và dải truy cập tuyến tính,
+để tận dụng tốc độ cao khi có thể truy cập tùy ý các  phần từ của dải truy cập ngẫu nhiên.
 
-#### More CTFE magic
+#### Thêm về phép lạ của CTFE
 
-[std.traits](https://dlang.org/phobos/std_traits.html) wraps most of
-D's [traits](https://dlang.org/spec/traits.html) except for some like
-`compiles` that can't be wrapped as it would lead to an immediate compile error:
+Thư viện [std.traits](https://dlang.org/phobos/std_traits.html) tận dụng
+hầu hết các [tính chất của trait trong D](https://dlang.org/spec/traits.html)
+ngoại trừ  vài chỗ như  `compiles` thì không thể, bởi nó dẫn tới lỗi biên dịch
 
 ```d
 __traits(compiles, obvious error - $%42); // false
 ```
 
-#### Special keywords
+#### Từ khóa đặc biệt
 
-Additionally for debugging purposes D provides a couple of special keywords:
+Để hỗ trợ bổ sung cho mục đích gỡ lỗi, một số từ khóa được gán nghĩa đặc biệt,
+ví dụ hàm `test` sau cho thấy cách sử dụng chúng:
 
 ```d
 void test(string file = __FILE__, size_t line = __LINE__, string mod = __MODULE__,
@@ -90,18 +93,19 @@ void test(string file = __FILE__, size_t line = __LINE__, string mod = __MODULE_
 }
 ```
 
-With D's CLI evaluation one doesn't even need `time` - CTFE can be used!
+Chế độ dòng lệnh của D thậm chí còn cho phép phân giải giá trị thời gian
+ngay lúc dịch chương trình:
 
 ```d
 rdmd --force --eval='pragma(msg, __TIMESTAMP__);'
 ```
 
-## In-depth
+## Nâng cao
 
 - [std.range.primitives](https://dlang.org/phobos/std_range_primitives.html)
 - [std.traits](https://dlang.org/phobos/std_traits.html)
 - [std.meta](https://dlang.org/phobos/std_meta.html)
-- [Specification on Traits in D](https://dlang.org/spec/traits.html)
+- [Đặc tả của traits](https://dlang.org/spec/traits.html)
 
 ## {SourceCode}
 
