@@ -3,7 +3,7 @@ Khúc dạo đầu về DLang
 
 ... hay là phiên bản tiếng Việt của Dlang Tour.
 
-[![Build Status](https://travis-ci.org/dlang-tour/vietnamese.svg?branch=master)](https://travis-ci.org/dlang-tour/vietnamese)
+[![sanitycheck build status](https://github.com/dlang-tour/vietnamese/actions/workflows/d.yml/badge.svg)](https://github.com/dlang-tour/vietnamese/actions/workflows/d.yml)
 
 Bạn đang đọc chỉ dẫn đầu tiên của dự án chuyển ngữ DLang Tour.
 Kết quả của dự án có ở trang web
